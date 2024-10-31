@@ -1,0 +1,99 @@
+{%- macro fmt_srm_badge(is_control, is_srm) -%}
+{%- if is_control -%}
+n/a
+{%- elif is_srm -%}
+{{ fmt_badge(label="SRM check", message="Fail", color="Fail", tooltip="Sample ratio mismatch detected.") }}
+{%- else -%}
+{{ fmt_badge(label="SRM check", message="Pass", color="Pass", tooltip="No sample ratio mismatch detected.") }}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro fmt_tea_badge(is_control, is_tea) -%}
+{%- if is_control -%}
+n/a
+{%- elif is_tea -%}
+{{ fmt_badge(label="Change", message="Detected", color="ChangedStrong", tooltip="Observed metric movements are inconsistent with statistical noise.") }}
+{%- else -%}
+{{ fmt_badge(label="Change", message="Undetected", color="Inconclusive", tooltip="Observed metric movements are consistent with statistical noise.\nEither the experiment is underpowered or had limited impact on the metrics.") }}
+{%- endif -%}
+{%- endmacro -%}
+
+## Experiment analysis
+
+{% if url_workbook|default('') -%}
+> [!TIP]
+> For interactive navigation of the latest analysis results for this experiment, view the [Experiment Analysis workbook]({{ url_workbook }}).
+{%- endif %}
+
+* ✨ **Feature flag:** {{ analysis.feature_flag }}
+* 🔬 **Allocation ID:** {{ analysis.allocation_id }}
+* 📅 **Analysis period:** {{ '{:.1f}'.format((analysis.end_time - analysis.start_time).total_seconds() / (24 * 60 * 60)) }} days ({{ analysis.start_time.strftime("%m/%d/%Y %H:%M") }} - {{ analysis.end_time.strftime("%m/%d/%Y %H:%M") }} UTC)
+
+{% if analysis.variants|length > 0 -%}
+| Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
+|:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
+{% for variant in analysis.variants -%}
+| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
+{% endfor -%}
+
+{%- if analysis.is_any_srm %}
+> [!CAUTION]
+> This experiment exhibits a Sample Ratio Mismatch (SRM) between the treatment and control groups. SRM can bias the results of an experiment. Ensure the experiment is properly configured and interpret the metric results with caution.
+{%- endif -%}
+{%- else -%}
+> [!CAUTION]
+> Important data quality checks were skipped because variant metadata were unavailable in this experiment analysis. Interpret the metric results with caution.
+{%- endif %}
+
+### Metric results
+
+{% if df_scorecard.empty -%}
+> [!WARNING]
+> Zero metric results were found.
+{% else -%}
+> [!TIP]
+> Hover your cursor over a **treatment effect badge** to display the metric value and the p-value of the statistical test.
+
+{%- for tag in tags_order -%}
+{%- set df_tag = df_scorecard[df_scorecard["MetricTag"] == tag] -%}
+{%- set n_metrics_total = df_tag.shape[0] -%}
+{%- set n_metrics_ss = df_tag["TreatmentEffect"].isin(["Degraded", "Improved", "Changed"]).sum() %}
+
+<details{% if loop.first %} open="true"{% endif %}>
+<summary><strong>{{ tag }}</strong> ({{ n_metrics_ss }} of {{ n_metrics_total }} conclusive)</summary>
+
+{{ fmt_metric_table(df_tag) }}
+
+> <details>
+> <summary><strong>Metric details</strong></summary>
+>
+{% for _, metric in df_tag[["MetricId", "MetricDisplayName", "MetricDescription"]].drop_duplicates().iterrows() -%}
+> * ***{{ metric.MetricDisplayName }}:*** {{ metric.MetricDescription }} {{ fmt_metric_search(metric.MetricId) }}</dd>
+{% endfor -%}
+>
+> </details>
+
+</details>
+
+{% endfor %}{# Loop over tags -#}
+{%- endif %}{# Empty scorecard -#}
+
+---
+
+### Guide
+
+<details>
+<summary><strong>Treatment effect badges</strong></summary>
+
+Each treatment column displays the impact of the treatment variant upon the metric value, relative to the control variant. For example, "+5.3%" means the metric value is 5.3% higher in the treatment variant than the control variant. The experiment analysis checks whether the observed treatment effect could be explained by random noise in the data.
+
+* If not statistically significant, we display the badge: {{ fmt_badge("Inconclusive", "+5.3%", "Inconclusive") }}
+* If statistically significant, the badge color reflects the desired direction of the metric and the strength of confidence:
+
+| Observed treatment effect | Marginal confidence<br />(p-value ≤ 0.05) | High confidence<br />(p-value ≤ 0.001) |
+|:--------------------------|:------------------------------------------|:---------------------------------------|
+| Against the desired direction | {{ fmt_badge("Degraded", "+5.3%", "DegradedWeak") }} | {{ fmt_badge("Degraded", "+5.3%", "DegradedStrong") }} |
+| Matches the desired direction | {{ fmt_badge("Improved", "+5.3%", "ImprovedWeak") }} | {{ fmt_badge("Improved", "+5.3%", "ImprovedStrong") }} |
+| Desired direction is neutral | {{ fmt_badge("Changed", "+5.3%", "ChangedWeak") }} | {{ fmt_badge("Changed", "+5.3%", "ChangedStrong") }} |
+
+</details>
