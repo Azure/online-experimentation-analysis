@@ -1,0 +1,69 @@
+name: "Online Experimentation Analysis"
+description: "Download the latest analysis results for an online experiment of an Azure App Configuration feature flag"
+
+inputs:
+  subscription-id:
+    description: "The subscription ID of the Log Analytics workspace."
+    required: true
+  resource-group:
+    description: "The resource group of the Log Analytics workspace."
+    required: true
+  log-analytics-workspace:
+    description: "The name of the Log Analytics workspace."
+    required: true
+  app-configuration-feature-flag:
+    description: "The App Configuration feature flag of the experiment."
+    required: true
+  metric-tags-order:
+    description: >
+      The analysis summary displays metrics grouped by their tags. This input specifies the display order
+      of metric tags as a comma separated list. Unspecified tags are appended in alphabetical order,
+      followed by the group of untagged metrics. Default: ''.
+    required: false
+    default: ""
+  lookback-days:
+    description: "The number of previous days to search the Log Analytics workspace for the latest analysis results. Default: 30."
+    required: false
+    default: 30
+  github-actions-summary:
+    description: "If the analysis summary should be displayed in the GitHub Action job summary. Default: true."
+    required: false
+    default: true
+
+outputs:
+  analysis-start-time:
+    description: "The start time of the analysis (ISO 8601 format)."
+    value: ${{ steps.analysis.outputs.analysis-start-time }}
+  analysis-end-time:
+    description: "The end time of the analysis (ISO 8601 format)."
+    value: ${{ steps.analysis.outputs.analysis-end-time }}
+  summary-md:
+    description: "Summary of the analysis results (GitHub Flavored Markdown format)."
+    value: ${{ steps.analysis.outputs.summary-md }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ${{ github.action_path }}/requirements.txt
+
+    - name: Download analysis results
+      id: analysis
+      shell: bash
+      run: python ${{ github.action_path }}/action.py
+      env:
+        SUBSCRIPTION_ID: ${{ inputs.subscription-id }}
+        RESOURCE_GROUP: ${{ inputs.resource-group }}
+        LOGANALYTICS_WORKSPACE: ${{ inputs.log-analytics-workspace }}
+        APPCONFIG_FEATURE_FLAG: ${{ inputs.app-configuration-feature-flag }}
+        METRIC_TAGS_ORDER: ${{ inputs.metric-tags-order }}
+        LOOKBACK_DAYS: ${{ inputs.lookback-days }}
+        GHA_SUMMARY: ${{ inputs.github-actions-summary }}

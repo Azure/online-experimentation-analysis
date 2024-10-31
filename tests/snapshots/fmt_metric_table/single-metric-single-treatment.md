@@ -1,0 +1,3 @@
+| Metric   |   VariantA 💊 | VariantB 💊                                                                                                                                                                                               |
+|:---------|--------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Metric 1 |           456 | ![Improved: +12.3%](https://img.shields.io/badge/Improved-%2B12.3%25-a1d99b "Metric value = 123 (analysis accounts for unequal allocation).&#013;Marginally statistically significant (p-value: 0.012).") |
