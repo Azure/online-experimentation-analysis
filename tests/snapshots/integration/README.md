@@ -1,7 +1,7 @@
-# End-to-end snapshot tests
+# Integration snapshot tests
 
 These test cases check the analysis summary produced by specific data scenarios.
-Each subdirectory corresponds to a single test case, which is executed by [`test_e2e.py`](../../test_e2e.py).
+Each subdirectory corresponds to a single test case, which is executed by [`test_integration.py`](../../test_integration.py).
 Each test case should have the following input files:
 
 - **analysis.json:** A JSON file storing the analysis metadata.
