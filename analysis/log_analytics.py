@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Functions to interact with a Log Analytics workspace"""
 
 import json

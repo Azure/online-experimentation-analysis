@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Tests for the analysis.results module."""
 
 from datetime import datetime

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Integration snapshot tests for the analysis summary."""
 
 import json
