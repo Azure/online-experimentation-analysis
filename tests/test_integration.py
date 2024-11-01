@@ -9,8 +9,8 @@ import pytest
 from analysis import download, latest_analysis, summarize
 from analysis.results import SCHEMA_SCORECARD
 
-SNAPSHOT_DIR = Path("tests", "snapshots", "integration")
-CASE_DIRS = [p for p in SNAPSHOT_DIR.iterdir() if p.is_dir()]
+PARENT_DIR = Path("tests", "snapshots", "integration")
+CASE_DIRS = [p for p in PARENT_DIR.iterdir() if p.is_dir()]
 
 
 def read_analysis(path: Path) -> pd.DataFrame:
