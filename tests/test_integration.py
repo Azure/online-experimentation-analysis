@@ -52,7 +52,7 @@ def fixture_case_dir(request, monkeypatch):
     """Fixture for an integration test case directory.
 
     This fixture mocks the analysis.log_analytics.query_df function to read fake
-    experiment analysis results from CSV files in the test case directory.
+    experiment analysis results from files in the test case directory.
     """
     _case_dir: Path = request.param
     analysis_file = _case_dir.joinpath("analysis.json")
