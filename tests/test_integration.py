@@ -1,4 +1,4 @@
-"""End-to-end snapshot tests for the analysis summary."""
+"""Integration snapshot tests for the analysis summary."""
 
 import json
 from pathlib import Path
@@ -9,7 +9,7 @@ import pytest
 from analysis import download, latest_analysis, summarize
 from analysis.results import SCHEMA_SCORECARD
 
-SNAPSHOT_DIR = Path("tests", "snapshots", "e2e")
+SNAPSHOT_DIR = Path("tests", "snapshots", "integration")
 CASE_DIRS = [p for p in SNAPSHOT_DIR.iterdir() if p.is_dir()]
 
 
@@ -49,7 +49,7 @@ def read_scorecard(path: Path) -> pd.DataFrame:
 
 @pytest.fixture(name="case_dir")
 def fixture_case_dir(request, monkeypatch):
-    """Fixture for a E2E test case directory.
+    """Fixture for an integration test case directory.
 
     This fixture mocks the analysis.log_analytics.query_df function to read fake
     experiment analysis results from CSV files in the test case directory.
@@ -76,7 +76,7 @@ def fixture_case_dir(request, monkeypatch):
 
 @pytest.mark.parametrize("case_dir", CASE_DIRS, indirect=True)
 def test_summarize(case_dir, snapshot):
-    """End-to-end snapshot test for the analysis summary."""
+    """Integration snapshot test for the analysis summary."""
     _ = None
     result = latest_analysis(_, _, feature_flag=_, allocation_id=_, timespan=_)
     summary = summarize(result)
