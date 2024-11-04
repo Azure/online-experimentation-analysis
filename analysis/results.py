@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Results from an online experimentation analysis"""
 
 from dataclasses import dataclass

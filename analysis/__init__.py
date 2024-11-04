@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Download and summarize the latest analysis results for an online experiment"""
 
 from .download import latest_analysis

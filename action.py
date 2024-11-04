@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """GitHub Action to retrieve the latest analysis results for an online experiment
 of an Azure App Configuration feature flag
 """

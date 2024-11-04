@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
 """Tests for formatting functions in the analysis.render module."""
 
 from pathlib import Path
