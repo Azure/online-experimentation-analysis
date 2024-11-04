@@ -1,0 +1,22 @@
+# Run Component Governance to detect open source components
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.12"
+      addToPath: true
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements-dev.txt
+    displayName: "Install dependencies"
+
+  - task: ComponentGovernanceComponentDetection@0
