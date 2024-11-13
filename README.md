@@ -1,5 +1,8 @@
 # Online Experimentation Analysis
 
+> [!IMPORTANT]
+> This GitHub Action is under beta release and is subject to the [Azure AI Private Preview Terms - Online Experimentation](private-preview-terms.md).
+
 This GitHub Action downloads the latest analysis results for your online experiment, so you can review how feature flag variants cause key metrics to change.
 The analysis results are summarized as a GitHub Flavored Markdown document for an enriched user experience.
 
@@ -96,7 +99,7 @@ jobs:
 
       - name: Download experiment analysis results
         id: results
-        uses: azure/online-experimentation-analysis@v1
+        uses: azure/online-experimentation-analysis@v1-beta
         with:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
