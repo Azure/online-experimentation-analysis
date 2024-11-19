@@ -28,11 +28,11 @@ The analysis results are summarized as a GitHub Flavored Markdown document for a
 
 ## Sample workflows
 
-| Trigger event               | Analysis results storage | Workflow file                      |
-| :-------------------------- | :----------------------- | :--------------------------------- |
-| Scheduled + manual dispatch | Directory of GitHub repo | [link](samples/commit-dir.yaml)    |
-| Scheduled + manual dispatch | GitHub Wiki              | [link](samples/commit-wiki.yaml)   |
-| Comment in GitHub Issue     | Comment in GitHub Issue  | [link](samples/issue-comment.yaml) |
+| Trigger event               | Analysis results storage       | Workflow file                      |
+| :-------------------------- | :----------------------------- | :--------------------------------- |
+| Scheduled + manual dispatch | Directory of GitHub repository | [link](samples/commit-dir.yaml)    |
+| Scheduled + manual dispatch | GitHub Wiki                    | [link](samples/commit-wiki.yaml)   |
+| Comment in GitHub Issue     | Comment in GitHub Issue        | [link](samples/issue-comment.yaml) |
 
 ## Contributing
 
