@@ -36,7 +36,12 @@ jobs:
 
       - name: Parse feature flag from issue comment
         id: parse
-        run: echo "feature-flag=$(echo $COMMENT | tr -s ' ' | cut -d ' ' -f2)" >> "$GITHUB_OUTPUT"
+        shell: python
+        run: |
+          import os
+          feature_flag = os.getenv("COMMENT").split()[1]
+          with open(os.getenv("GITHUB_OUTPUT"), "a", encoding="utf-8") as f:
+              f.write(f"feature-flag={feature_flag}\n")
         env:
           COMMENT: ${{ github.event.comment.body }}
 
