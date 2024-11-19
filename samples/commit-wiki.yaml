@@ -3,12 +3,18 @@
 # - Update the environment variables for your setup.
 # - Create GitHub Wiki for the repository.
 
-# Overall workflow:
+# This workflow will:
 # 1. List experiments (read from App Configuration file or manually specify a single feature flag).
 # 2. Analyze each experiment and save the results summary to a Markdown file.
 # 3. Commit the analysis results to the GitHub Wiki.
 
 name: Analyze Experiments
+
+# Update for your setup
+env:
+  ANALYSIS_FILE_PREFIX: "Experiment:-"
+  APP_CONFIGURATION_FILE: .config/feature-flags.json
+  METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
 on:
   # trigger automatically (daily at 12:30 AM UTC)
@@ -21,12 +27,6 @@ on:
         description: "The App Configuration feature flag. By default, analyze all running experiments."
         required: false
         type: string
-
-# Update for your setup
-env:
-  ANALYSIS_FILE_PREFIX: "Experiment:-"
-  APP_CONFIGURATION_FILE: .config/feature-flags.json
-  METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
 jobs:
   list-experiments:
@@ -127,7 +127,7 @@ jobs:
           INDEX_PAGE: "Feature-Experiments.md"
           SIDEBAR_PAGE: "_Sidebar.md"
 
-      # recommendation: read the limitations of this GitHub Action
+      # recommendation: read the limitations of this 3rd party GitHub Action
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update experiment analysis results"

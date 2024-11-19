@@ -1,14 +1,20 @@
 # Prerequisites:
 # - Copy to a new GitHub Actions workflow file in the .github/workflows directory.
 # - Update the environment variables for your setup.
-# - Consider writing results to an alternative GitHub repository if security is a concern.
+# - Consider committing results to an alternative GitHub repository if security is a concern.
 
-# Overall workflow:
+# This workflow will:
 # 1. List experiments (read from App Configuration file or manually specify a single feature flag).
 # 2. Analyze each experiment and save the results summary to a Markdown file.
 # 3. Commit the analysis results to a directory in the GitHub repository.
 
 name: Analyze Experiments
+
+# Update for your setup
+env:
+  ANALYSIS_DIR: .config/analysis
+  APP_CONFIGURATION_FILE: .config/feature-flags.json
+  METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
 on:
   # trigger automatically (daily at 12:30 AM UTC)
@@ -21,12 +27,6 @@ on:
         description: "The App Configuration feature flag. By default, analyze all running experiments."
         required: false
         type: string
-
-# Update for your setup
-env:
-  ANALYSIS_DIR: .config/analysis
-  APP_CONFIGURATION_FILE: .config/feature-flags.json
-  METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
 jobs:
   list-experiments:
@@ -114,7 +114,7 @@ jobs:
           echo "" >> ${{ env.ANALYSIS_DIR }}/README.md
           echo "This directory contains the latest analysis results of feature flag experiments." >> ${{ env.ANALYSIS_DIR }}/README.md
 
-      # recommendation: read the limitations of this GitHub Action
+      # recommendation: read the limitations of this 3rd party GitHub Action
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update experiment analysis results"
