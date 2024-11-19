@@ -3,9 +3,9 @@
 # - Update the environment variables for your setup.
 
 # This workflow will:
-# 1. If issue comment begins with trigger word, then read feature flag (2nd word).
+# 1. If issue comment begins with trigger word, then read feature flag from 2nd word.
 # 2. Analyze the experiment.
-# 3. Comment on the issue with the analysis summary.
+# 3. Post new comment with the analysis summary.
 
 name: Analyze Experiment (issue comment)
 
