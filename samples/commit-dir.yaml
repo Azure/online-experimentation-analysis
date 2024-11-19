@@ -1,0 +1,121 @@
+# Prerequisites:
+# - Copy to a new GitHub Actions workflow file in the .github/workflows directory.
+# - Update the environment variables for your setup.
+# - Consider writing results to an alternative GitHub repository if security is a concern.
+
+# Overall workflow:
+# 1. List experiments (read from App Configuration file or manually specify a single feature flag).
+# 2. Analyze each experiment and save the results summary to a Markdown file.
+# 3. Commit the analysis results to a directory in the GitHub repository.
+
+name: Analyze Experiments
+
+on:
+  # trigger automatically (daily at 12:30 AM UTC)
+  schedule:
+    - cron: "30 0 * * *"
+  # trigger manually (via GitHub Actions UI)
+  workflow_dispatch:
+    inputs:
+      app-configuration-feature-flag:
+        description: "The App Configuration feature flag. By default, analyze all running experiments."
+        required: false
+        type: string
+
+# Update for your setup
+env:
+  ANALYSIS_DIR: .config/analysis
+  APP_CONFIGURATION_FILE: .config/feature-flags.json
+  METRIC_TAGS_ORDER: "Important, Cost, Performance"
+
+jobs:
+  list-experiments:
+    name: List experiments
+    runs-on: ubuntu-latest
+    outputs:
+      feature-flags: ${{ steps.write.outputs.feature-flags }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read running experiments from config file
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '')
+        run: echo "FEATURE_FLAGS=$(jq -c '[.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
+
+      - name: Propagate specified feature flag
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag != ''
+        run: echo "FEATURE_FLAGS=[\"${{ github.event.inputs.app-configuration-feature-flag }}\"]" >> $GITHUB_ENV
+
+      - name: Export list
+        id: write
+        run: echo "feature-flags=$FEATURE_FLAGS" >> "$GITHUB_OUTPUT"
+
+  analysis:
+    name: Analysis of ${{ matrix.feature-flag }}
+    runs-on: ubuntu-latest
+    needs: list-experiments
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        feature-flag: ${{ fromJson(needs.list-experiments.outputs.feature-flags) }}
+
+    steps:
+      - name: Azure login using Federated Credentials
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Summarize analysis results
+        id: results
+        uses: azure/online-experimentation-analysis@v1-beta
+        with:
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
+          log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
+          app-configuration-feature-flag: ${{ matrix.feature-flag }}
+          metric-tags-order: ${{ env.METRIC_TAGS_ORDER }}
+
+      - name: Save results to file
+        run: echo "$CONTENT" >> ${{ matrix.feature-flag }}.md
+        env:
+          CONTENT: ${{ steps.results.outputs.summary-md }}
+
+      - name: Upload results to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-${{ matrix.feature-flag }}
+          path: ${{ matrix.feature-flag }}.md
+
+  commit:
+    name: Commit analysis results
+    runs-on: ubuntu-latest
+    needs: analysis
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download results from GitHub Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.ANALYSIS_DIR }}
+          pattern: analysis-*
+          merge-multiple: true
+
+      - name: Write README.md
+        run: |
+          echo "# Experiment Analysis Results" > ${{ env.ANALYSIS_DIR }}/README.md
+          echo "" >> ${{ env.ANALYSIS_DIR }}/README.md
+          echo "This directory contains the latest analysis results of feature flag experiments." >> ${{ env.ANALYSIS_DIR }}/README.md
+
+      # recommendation: read the limitations of this GitHub Action
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update experiment analysis results"
+          file_pattern: ${{ env.ANALYSIS_DIR }}/*.md
