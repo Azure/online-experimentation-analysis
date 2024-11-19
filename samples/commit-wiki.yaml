@@ -124,8 +124,8 @@ jobs:
             echo "* [[$flag|$ANALYSIS_PAGE_PREFIX$flag]]" >> $SIDEBAR_PAGE
           done
         env:
-          INDEX_PAGE: 'Feature-Experiments.md'
-          SIDEBAR_PAGE: '_Sidebar.md'
+          INDEX_PAGE: "Feature-Experiments.md"
+          SIDEBAR_PAGE: "_Sidebar.md"
 
       # recommendation: read the limitations of this GitHub Action
       - uses: stefanzweifel/git-auto-commit-action@v5
