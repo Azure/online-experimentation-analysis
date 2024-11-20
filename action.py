@@ -15,7 +15,7 @@ from azure.identity import DefaultAzureCredential
 
 from analysis import AnalysisResults, LogAnalyticsWorkspace, latest_analysis, summarize
 
-GITHUB_OUTPUT = os.environ.get("GITHUB_OUTPUT")
+GITHUB_OUTPUT = os.getenv("GITHUB_OUTPUT")
 GITHUB_STEP_SUMMARY = os.getenv("GITHUB_STEP_SUMMARY")
 
 SUBSCRIPTION_ID = os.getenv("SUBSCRIPTION_ID")

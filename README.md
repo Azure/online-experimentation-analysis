@@ -26,87 +26,21 @@ The analysis results are summarized as a GitHub Flavored Markdown document for a
 | analysis-end-time   | The end time of the analysis (ISO 8601 format).                    |
 | summary-md          | Summary of the analysis results (GitHub Flavored Markdown format). |
 
-## Sample workflow
+## Sample workflows
 
-The following GitHub Actions workflow reads the list of running experiments from a JSON file storing the Azure App Configuration feature flags.
-It then executes the Online Experimentation Analysis action for every feature flag in this list, summarizing the latest analysis results for each experiment.
-The workflow is scheduled to run daily or it can be manually triggered by the [Run workflow button](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow?tool=webui).
-When triggering manually, you can specify a single feature flag to analyze (instead of analyzing all running experiments).
+How and when to download experiment results depends on individual needs, so workflow customization is likely needed.
+We've provided multiple sample workflows as a starting point, which differ by:
 
-```yaml
-# File: .github/workflows/analyze-experiments.yml
+- Trigger events
+- Storage location for analysis results
+- Process single or multiple experiments
+- Prerequisites (see sample header)
 
-name: Analyze Experiments
-on:
-  # analyze running experiments (daily at 12:30 AM UTC)
-  schedule:
-    - cron: "30 0 * * *"
-  # analyze specific experiment (manually via UI)
-  workflow_dispatch:
-    inputs:
-      app-configuration-feature-flag:
-        description: "The App Configuration feature flag. By default, analyze all running experiments."
-        required: false
-        type: string
-
-# Update for your setup
-env:
-  APP_CONFIGURATION_FILE: .config/feature-flags.json
-  METRIC_TAGS_ORDER: "Important, Cost, Performance"
-
-jobs:
-  list-experiments:
-    name: List experiments
-    runs-on: ubuntu-latest
-    outputs:
-      feature-flags: ${{ steps.write.outputs.feature-flags }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Read running experiments from config file
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '')
-        run: echo "FEATURE_FLAGS=$(jq -c '[.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
-
-      - name: Propagate specified feature flag
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag != ''
-        run: echo "FEATURE_FLAGS=[\"${{ github.event.inputs.app-configuration-feature-flag }}\"]" >> $GITHUB_ENV
-
-      - name: Export list
-        id: write
-        run: echo "feature-flags=$FEATURE_FLAGS" >> "$GITHUB_OUTPUT"
-
-  analysis:
-    name: Analysis of ${{ matrix.feature-flag }}
-    runs-on: ubuntu-latest
-    needs: list-experiments
-    permissions:
-      id-token: write
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        feature-flag: ${{ fromJson(needs.list-experiments.outputs.feature-flags) }}
-
-    steps:
-      - name: Azure login using Federated Credentials
-        uses: azure/login@v2
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Download experiment analysis results
-        id: results
-        uses: azure/online-experimentation-analysis@v1-beta
-        with:
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-          resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
-          log-analytics-workspace: ${{ vars.AZURE_LOG_ANALYTICS_WORKSPACE }}
-          app-configuration-feature-flag: ${{ matrix.feature-flag }}
-          metric-tags-order: ${{ env.METRIC_TAGS_ORDER }}
-```
+| Trigger events                                                                                                                                                                                                                                                                              | Analysis results storage         | Experiments | Sample                             |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------- | :---------- | :--------------------------------- |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | Directory of GitHub repository   | Multiple    | [Link](samples/commit-dir.yaml)    |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | GitHub Wiki                      | Multiple    | [Link](samples/commit-wiki.yaml)   |
+| Trigger comment in GitHub Issue                                                                                                                                                                                                                                                             | Response comment in GitHub Issue | Single      | [Link](samples/issue-comment.yaml) |
 
 ## Contributing
 
