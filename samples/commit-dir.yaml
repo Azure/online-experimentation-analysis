@@ -1,11 +1,13 @@
+# This workflow will:
+# 1. Create list of experiments
+#   - Read all feature flags from App Configuration file, or
+#   - Manually specify a single feature flag.
+# 2. Analyze each experiment and save the results summary to a Markdown file.
+# 3. Commit the analysis results to a directory in the GitHub repository.
+#
 # Prerequisites:
 # - Copy to a new GitHub Actions workflow file in the .github/workflows directory.
 # - Update the environment variables for your setup.
-#
-# This workflow will:
-# 1. List experiments (read from App Configuration file or manually specify a single feature flag).
-# 2. Analyze each experiment and save the results summary to a Markdown file.
-# 3. Commit the analysis results to a directory in the GitHub repository.
 
 name: Analyze Experiments
 

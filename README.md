@@ -28,11 +28,19 @@ The analysis results are summarized as a GitHub Flavored Markdown document for a
 
 ## Sample workflows
 
-| Trigger event                                                                                                                                                                                                                                                                               | Analysis results storage         | Workflow file                      |
-| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------- | :--------------------------------- |
-| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | Directory of GitHub repository   | [Link](samples/commit-dir.yaml)    |
-| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | GitHub Wiki                      | [Link](samples/commit-wiki.yaml)   |
-| Trigger comment in GitHub Issue                                                                                                                                                                                                                                                             | Response comment in GitHub Issue | [Link](samples/issue-comment.yaml) |
+How and when to download experiment results depends on individual needs, so workflow customization is likely needed.
+We've provided multiple sample workflows as a starting point, which differ by:
+
+- Trigger events
+- Storage location for analysis results
+- Process single or multiple experiments
+- Prerequisites (see sample header)
+
+| Trigger events                                                                                                                                                                                                                                                                              | Analysis results storage         | Experiments |               Sample               |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------- | :---------- | :--------------------------------- |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | Directory of GitHub repository   |  Multiple   |  [Link](samples/commit-dir.yaml)   |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | GitHub Wiki                      |  Multiple   |  [Link](samples/commit-wiki.yaml)  |
+| Trigger comment in GitHub Issue                                                                                                                                                                                                                                                             | Response comment in GitHub Issue |   Single    | [Link](samples/issue-comment.yaml) |
 
 ## Contributing
 
