@@ -2,6 +2,7 @@
 # - Copy to a new GitHub Actions workflow file in the .github/workflows directory.
 # - Update the environment variables for your setup.
 # - Create GitHub Wiki for the repository.
+#   - Check eligibility at https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis
 #
 # This workflow will:
 # 1. List experiments (read from App Configuration file or manually specify a single feature flag).
@@ -41,7 +42,7 @@ jobs:
 
       - name: Read running experiments from config file
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '')
-        run: echo "FEATURE_FLAGS=$(jq -c '[.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
+        run: echo "FEATURE_FLAGS=$(jq -c -n '[inputs.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
 
       - name: Propagate specified feature flag
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag != ''

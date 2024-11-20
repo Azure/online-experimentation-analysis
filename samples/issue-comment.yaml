@@ -4,8 +4,9 @@
 #
 # This workflow will:
 # 1. If issue comment begins with trigger word, then read feature flag from 2nd word.
+#      Example: /experiment-analysis feature-flag-1
 # 2. Analyze the experiment.
-# 3. Post new comment with the analysis summary.
+# 3. Post response comment with the analysis summary.
 
 name: Analyze Experiment (issue comment)
 
