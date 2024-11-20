@@ -28,11 +28,11 @@ The analysis results are summarized as a GitHub Flavored Markdown document for a
 
 ## Sample workflows
 
-| Trigger event               | Analysis results storage       | Workflow file                      |
-| :-------------------------- | :----------------------------- | :--------------------------------- |
-| Scheduled + manual dispatch | Directory of GitHub repository | [link](samples/commit-dir.yaml)    |
-| Scheduled + manual dispatch | GitHub Wiki                    | [link](samples/commit-wiki.yaml)   |
-| Comment in GitHub Issue     | Comment in GitHub Issue        | [link](samples/issue-comment.yaml) |
+| Trigger event                                                                                                                                                                                                                                                                               | Analysis results storage         | Workflow file                      |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------- | :--------------------------------- |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | Directory of GitHub repository   | [link](samples/commit-dir.yaml)    |
+| [Scheduled](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) + [manual dispatch](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow) | GitHub Wiki                      | [link](samples/commit-wiki.yaml)   |
+| Trigger comment in GitHub Issue                                                                                                                                                                                                                                                             | Response comment in GitHub Issue | [link](samples/issue-comment.yaml) |
 
 ## Contributing
 
