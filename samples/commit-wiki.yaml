@@ -15,7 +15,7 @@ name: Analyze Experiments
 
 # Update for your setup
 env:
-  ANALYSIS_FILE_PREFIX: "Experiment:-"
+  ANALYSIS_PAGE_PREFIX: "Experiment:-"
   APP_CONFIGURATION_FILE: .config/feature-flags.json
   METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
