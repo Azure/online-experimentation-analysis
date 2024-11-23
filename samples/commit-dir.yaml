@@ -100,6 +100,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Check ANALYSIS_DIR is set
+        if: env.ANALYSIS_DIR == ''
+        run: |
+          echo "::error ::You must set env.ANALYSIS_DIR in ${{ github.workflow }} GitHub Actions workflow"
+          exit 1
+
       - uses: actions/checkout@v4
 
       - name: Download results from GitHub Artifacts
