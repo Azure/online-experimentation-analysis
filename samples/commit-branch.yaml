@@ -3,19 +3,17 @@
 #   - Read all feature flags from App Configuration file, or
 #   - Manually specify a single feature flag.
 # 2. Analyze each experiment and save the results summary to a Markdown file.
-# 3. Commit the analysis results to a directory in the GitHub repository.
+# 3. Commit the analysis results to a dedicated branch in the GitHub repository.
 #
 # Prerequisites:
 # - Copy to a new GitHub Actions workflow file in the .github/workflows directory.
 # - Update the environment variables for your setup.
-# - GitHub Actions has write permissions for main branch (i.e., unprotected branch).
-#   - See https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
 
 name: Analyze Experiments
 
 # Update for your setup
 env:
-  ANALYSIS_DIR: .config/analysis
+  ANALYSIS_BRANCH: analysis-results
   APP_CONFIGURATION_FILE: .config/feature-flags.json
   METRIC_TAGS_ORDER: "Important, Cost, Performance"
 
@@ -102,29 +100,41 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Check ANALYSIS_DIR is set
-        if: env.ANALYSIS_DIR == ''
+      - name: Check ANALYSIS_BRANCH is set
+        if: env.ANALYSIS_BRANCH == ''
         run: |
-          echo "::error ::You must set env.ANALYSIS_DIR in ${{ github.workflow }} GitHub Actions workflow"
+          echo "::error ::You must set env.ANALYSIS_BRANCH in ${{ github.workflow }} GitHub Actions workflow"
           exit 1
 
       - uses: actions/checkout@v4
 
+      - name: Checkout analysis branch
+        run: |
+          set +e
+          git ls-remote --exit-code --heads origin refs/heads/"$ANALYSIS_BRANCH"
+          if [ "$?" == "2" ]; then
+            git checkout --orphan "$ANALYSIS_BRANCH"
+            git reset --hard
+          else
+            git fetch origin "$ANALYSIS_BRANCH"
+            git checkout "$ANALYSIS_BRANCH"
+          fi
+
       - name: Download results from GitHub Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ${{ env.ANALYSIS_DIR }}
           pattern: analysis-*
           merge-multiple: true
 
       - name: Write README.md
         run: |
-          echo "# Experiment Analysis Results" > ${{ env.ANALYSIS_DIR }}/README.md
-          echo "" >> ${{ env.ANALYSIS_DIR }}/README.md
-          echo "This directory contains the latest analysis results of feature flag experiments." >> ${{ env.ANALYSIS_DIR }}/README.md
+          echo "# Experiment Analysis Results" > README.md
+          echo "" >> README.md
+          echo "This branch contains the latest analysis results of feature flag experiments." >> README.md
 
       # recommendation: read the limitations of this 3rd party GitHub Action
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
+          branch: ${{ env.ANALYSIS_BRANCH }}
+          create_branch: true
           commit_message: "chore: update experiment analysis results"
-          file_pattern: ${{ env.ANALYSIS_DIR }}/*.md
