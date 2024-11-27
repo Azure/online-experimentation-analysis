@@ -6,6 +6,8 @@
 * 🔬 **Allocation ID:** test_allocation
 * 📅 **Analysis period:** 30.0 days (01/01/2024 00:00 - 01/31/2024 00:00 UTC)
 
+### Summary of variants
+
 | Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
 |:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
 | Variant1 | Control | 50% | 1,000 | n/a | n/a |
