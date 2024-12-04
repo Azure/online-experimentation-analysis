@@ -1,1 +1,1 @@
-![Improved: +5.3%](https://img.shields.io/badge/Improved-%2B5.3%25-157e3b "Metric value = 4,567 (analysis accounts for unequal allocation).&#013;Highly statistically significant (p-value: 1e-6).")
+![Improved: +5.3%](https://img.shields.io/badge/Improved-%2B5.3%25-157e3b "Metric value = 4,567 (comparison accounts for unequal allocation).&#013;Highly statistically significant (p-value: 1e-6).")

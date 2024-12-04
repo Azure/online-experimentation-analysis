@@ -22,9 +22,9 @@
 <details open="true">
 <summary><strong>Performance</strong> (1 of 1 conclusive)</summary>
 
-| Metric   |   Variant1 💊 | Variant2 💊                                                                                                                                                                                             |
-|:---------|--------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Metric 1 |         7,441 | ![Improved: -18.1%](https://img.shields.io/badge/Improved---18.1%25-157e3b "Metric value = 6,094 (analysis accounts for unequal allocation).&#013;Highly statistically significant (p-value: 1e-295).") |
+| Metric   |   Variant1 💊 | Variant2 💊                                                                                                                                                                                               |
+|:---------|--------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Metric 1 |         7,441 | ![Improved: -18.1%](https://img.shields.io/badge/Improved---18.1%25-157e3b "Metric value = 6,094 (comparison accounts for unequal allocation).&#013;Highly statistically significant (p-value: 1e-295).") |
 
 > <details>
 > <summary><strong>Metric details</strong></summary>
