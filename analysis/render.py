@@ -208,7 +208,7 @@ def fmt_treatment_badge(row: pd.Series) -> str:
 
     tooltip_value = f"Metric value = {fmt_metric_value(value, kind)}"
     if kind in ["EventCount", "UserCount", "Sum"]:
-        tooltip_value += " (analysis accounts for unequal allocation)"
+        tooltip_value += " (comparison accounts for unequal allocation)"
     tooltip_value += "."
 
     tooltip = "\n".join([tooltip_value, tooltip_stat])
