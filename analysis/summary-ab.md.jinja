@@ -74,7 +74,7 @@ n/a
 > <summary><strong>Metric details</strong></summary>
 >
 {% for _, metric in df_tag[["MetricId", "MetricDisplayName", "MetricDescription"]].drop_duplicates().iterrows() -%}
-> * ***{{ metric.MetricDisplayName }}:*** {{ metric.MetricDescription }} {{ fmt_metric_search(metric.MetricId) }}</dd>
+> * ***{{ metric.MetricDisplayName }}:*** {{ strip_commit_hash(metric.MetricDescription) }} {{ fmt_metric_search(metric.MetricId) }}</dd>
 {% endfor -%}
 >
 > </details>

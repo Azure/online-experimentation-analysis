@@ -19,6 +19,7 @@ from analysis.render import (
     fmt_pvalue,
     fmt_reldiff,
     fmt_treatment_badge,
+    strip_commit_hash,
 )
 
 
@@ -279,6 +280,15 @@ def test_fmt_metric_table(test_case, data, snapshot):
 
     snapshot.snapshot_dir = Path("tests", "snapshots", "fmt_metric_table")
     snapshot.assert_match(output, f"{test_case}.md")
+
+
+def test_strip_commit_hash():
+    """Test stripping the optional commit hash from the metric description."""
+    with_hash = "Metric description Commit hash: 123456789"
+    without_hash = "Metric description"
+
+    assert strip_commit_hash(with_hash) == "Metric description"
+    assert strip_commit_hash(without_hash) == "Metric description"
 
 
 def test_fmt_metric_search_enabled(monkeypatch):
