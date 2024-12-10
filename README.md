@@ -22,6 +22,8 @@ The analysis results are summarized as a GitHub Flavored Markdown document for a
 
 | Name                | Description                                                        |
 | :------------------ | :----------------------------------------------------------------- |
+| allocation-id       | Identifier for the experiment configuration.                       |
+| scorecard-id        | Identifier for the experiment analysis.                            |
 | analysis-start-time | The start time of the analysis (ISO 8601 format).                  |
 | analysis-end-time   | The end time of the analysis (ISO 8601 format).                    |
 | summary-md          | Summary of the analysis results (GitHub Flavored Markdown format). |
