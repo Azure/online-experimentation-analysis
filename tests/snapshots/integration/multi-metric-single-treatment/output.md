@@ -5,6 +5,7 @@
 * ✨ **Feature flag:** test_feature
 * 🔬 **Allocation ID:** test_allocation
 * 📅 **Analysis period:** 30.0 days (01/01/2024 00:00 - 01/31/2024 00:00 UTC)
+* 🔖 **Scorecard ID:** test_scorecard
 
 ### Summary of variants
 

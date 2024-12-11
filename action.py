@@ -125,6 +125,8 @@ if __name__ == "__main__":
     if results.scorecard.empty:
         raise ValueError("Found analysis results but unable to download metric data")
 
+    set_github_output("allocation-id", results.analysis.allocation_id)
+    set_github_output("scorecard-id", results.analysis.scorecard_id)
     set_github_output("analysis-start-time", results.analysis.start_time.isoformat())
     set_github_output("analysis-end-time", results.analysis.end_time.isoformat())
     set_github_output("summary-md", summary_md)
