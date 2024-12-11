@@ -248,6 +248,12 @@ def fmt_metric_table(df: pd.DataFrame) -> str:
     )
 
 
+def strip_commit_hash(description: str) -> str:
+    """Strip commit hash from a metric description"""
+    marker = "Commit hash:"
+    return description.split(marker)[0].strip()
+
+
 def fmt_metric_search(
     metric_id: str, text: str = "Search for metric definition."
 ) -> str:
@@ -275,6 +281,7 @@ def summarize(
 
     template = env.get_template("summary-ab.md.jinja")
     template.globals.update(fmt_metric_table=fmt_metric_table)
+    template.globals.update(strip_commit_hash=strip_commit_hash)
     template.globals.update(fmt_metric_search=fmt_metric_search)
     template.globals.update(fmt_badge=fmt_badge)
 
