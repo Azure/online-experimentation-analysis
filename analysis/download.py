@@ -46,11 +46,10 @@ def treatment_effect_assessment(df: pd.DataFrame) -> bool:
 
     pvalues = df_evaluated["PValue"].to_numpy()
 
-    if len(pvalues) == 0:
-        return False
-    else:
+    if len(pvalues) > 0:
         pvalue_bh = false_discovery_control(pvalues, method="bh").min()
         return pvalue_bh <= 0.05
+    return False
 
 
 def extract_metadata(df: pd.DataFrame) -> Optional[AnalysisMetadata]:
