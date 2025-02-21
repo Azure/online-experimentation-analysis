@@ -123,9 +123,9 @@ def latest_analysis(
 
     # update 'is_tea' for each variant
     for variant in results.analysis.variants:
-        scorcard_variant = results.scorecard.loc[
+        scorecard_variant = results.scorecard.loc[
             results.scorecard["TreatmentVariant"] == variant.variant
         ]
-        variant.is_tea = treatment_effect_assessment(scorcard_variant)
+        variant.is_tea = treatment_effect_assessment(scorecard_variant)
 
     return results
