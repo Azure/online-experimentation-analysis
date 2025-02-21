@@ -8,10 +8,9 @@ import logging
 from datetime import datetime, timedelta
 from typing import Optional
 
-import numpy as np
 import pandas as pd
 from jinja2 import Template
-from scipy.stats import chi2
+from scipy.stats import false_discovery_control
 
 from .log_analytics import LogAnalyticsWorkspace, query_df
 from .results import AnalysisMetadata, AnalysisResults, VariantMetadata
@@ -34,7 +33,7 @@ AEWExperimentScorecardMetricPairs
 """.strip()
 
 
-def treatment_effect_assessment(df: pd.DataFrame) -> dict:
+def treatment_effect_assessment(df: pd.DataFrame) -> bool:
     """Overall assessment of whether a treatment effect was detected"""
     df_evaluated = df.loc[
         lambda df: ~df["MetricTags"].str.contains("__Internal__")
@@ -46,25 +45,12 @@ def treatment_effect_assessment(df: pd.DataFrame) -> dict:
     ]
 
     pvalues = df_evaluated["PValue"].to_numpy()
-    pvalues = np.maximum(pvalues, 1e-20)
-    n_metrics_evaluated = len(pvalues)
-    n_metrics_statsig = (pvalues <= 0.05).sum()
-    n_metrics_vstatsig = (pvalues <= 1e-7).sum()
 
-    test_stat = -2 * np.sum(np.log(pvalues))
-    pvalue_fisher = 1 - chi2.cdf(test_stat, 2 * len(pvalues))
-
-    statsig = n_metrics_evaluated > 0 and (
-        pvalue_fisher <= 0.05 or n_metrics_vstatsig >= 1
-    )
-
-    return {
-        "statsig": statsig,
-        "pvalue_fisher": pvalue_fisher,
-        "n_metrics_evaluated": n_metrics_evaluated,
-        "n_metrics_statsig": n_metrics_statsig,
-        "n_metrics_vstatsig": n_metrics_vstatsig,
-    }
+    if len(pvalues) == 0:
+        return False
+    else:
+        pvalue_bh = false_discovery_control(pvalues, method="bh").min()
+        return pvalue_bh <= 0.05
 
 
 def extract_metadata(df: pd.DataFrame) -> Optional[AnalysisMetadata]:
@@ -141,7 +127,6 @@ def latest_analysis(
         scorcard_variant = results.scorecard.loc[
             results.scorecard["TreatmentVariant"] == variant.variant
         ]
-        tea = treatment_effect_assessment(scorcard_variant)
-        variant.is_tea = tea["statsig"]
+        variant.is_tea = treatment_effect_assessment(scorcard_variant)
 
     return results
