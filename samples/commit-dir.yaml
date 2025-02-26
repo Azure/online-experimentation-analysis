@@ -17,7 +17,7 @@ name: Analyze Experiments
 env:
   ANALYSIS_DIR: .config/analysis
   APP_CONFIGURATION_FILE: .config/feature-flags.json
-  METRIC_TAGS_ORDER: "Important, Cost, Performance"
+  METRIC_CATEGORY_ORDER: "Important, Cost, Performance"
 
 on:
   # trigger automatically (daily at 12:30 AM UTC)
@@ -76,13 +76,13 @@ jobs:
 
       - name: Summarize analysis results
         id: results
-        uses: azure/online-experimentation-analysis@v1-beta
+        uses: azure/online-experimentation-analysis@v2-beta
         with:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ matrix.feature-flag }}
-          metric-tags-order: ${{ env.METRIC_TAGS_ORDER }}
+          metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
 
       - name: Save results to file
         run: echo "$CONTENT" >> ${{ matrix.feature-flag }}.md

@@ -14,11 +14,11 @@ inputs:
   app-configuration-feature-flag:
     description: "The App Configuration feature flag of the experiment."
     required: true
-  metric-tags-order:
+  metric-category-order:
     description: >
-      The analysis summary displays metrics grouped by their tags. This input specifies the display order
-      of metric tags as a comma separated list. Unspecified tags are appended in alphabetical order,
-      followed by the group of untagged metrics. Default: ''.
+      The analysis summary displays metrics grouped by their categories. This input specifies the display order
+      of metric categories as a comma separated list. Unspecified categories are appended in alphabetical order,
+      followed by the group of uncategorized metrics. Default: ''.
     required: false
     default: ""
   lookback-days:
@@ -64,6 +64,6 @@ runs:
         RESOURCE_GROUP: ${{ inputs.resource-group }}
         LOGANALYTICS_WORKSPACE: ${{ inputs.log-analytics-workspace }}
         APPCONFIG_FEATURE_FLAG: ${{ inputs.app-configuration-feature-flag }}
-        METRIC_TAGS_ORDER: ${{ inputs.metric-tags-order }}
+        METRIC_CATEGORY_ORDER: ${{ inputs.metric-category-order }}
         LOOKBACK_DAYS: ${{ inputs.lookback-days }}
         GHA_SUMMARY: ${{ inputs.github-actions-summary }}

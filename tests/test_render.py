@@ -24,7 +24,7 @@ from analysis.render import (
 
 
 @pytest.mark.parametrize(
-    "value, kind, expected",
+    "value, metric_type, expected",
     [
         (np.nan, "EventCount", "--"),
         (np.inf, "EventCount", "∞"),
@@ -54,9 +54,9 @@ from analysis.render import (
         (0.0000123456, "Sum", "1.235e-5"),
     ],
 )
-def test_fmt_metric_value(value, kind, expected):
+def test_fmt_metric_value(value, metric_type, expected):
     """Test formatting of metric value."""
-    assert fmt_metric_value(value, kind) == expected
+    assert fmt_metric_value(value, metric_type) == expected
 
 
 @pytest.mark.parametrize(
@@ -154,7 +154,7 @@ def test_fmt_badge(test_case, label, message, color, tooltip, snapshot):
             {
                 "TreatmentEffect": "Improved",
                 "PValue": 1.23e-6,
-                "MetricKind": "EventCount",
+                "MetricType": "EventCount",
                 "RelativeDifference": 0.053,
                 "TreatmentMetricValue": 4567,
             },
@@ -164,7 +164,7 @@ def test_fmt_badge(test_case, label, message, color, tooltip, snapshot):
             {
                 "TreatmentEffect": "Degraded",
                 "PValue": 0.023,
-                "MetricKind": "EventRate",
+                "MetricType": "EventRate",
                 "RelativeDifference": 1.23,
                 "TreatmentMetricValue": 56.7,
             },
@@ -174,7 +174,7 @@ def test_fmt_badge(test_case, label, message, color, tooltip, snapshot):
             {
                 "TreatmentEffect": "Inconclusive",
                 "PValue": 0.456,
-                "MetricKind": "Average",
+                "MetricType": "Average",
                 "RelativeDifference": -0.543,
                 "TreatmentMetricValue": 12345.6789,
             },
@@ -184,7 +184,7 @@ def test_fmt_badge(test_case, label, message, color, tooltip, snapshot):
             {
                 "TreatmentEffect": "Too few samples",
                 "PValue": 0.049,
-                "MetricKind": "Average",
+                "MetricType": "Average",
                 "RelativeDifference": -0.543,
                 "TreatmentMetricValue": 12345.6789,
             },
@@ -194,7 +194,7 @@ def test_fmt_badge(test_case, label, message, color, tooltip, snapshot):
             {
                 "TreatmentEffect": "Zero samples",
                 "PValue": 1,
-                "MetricKind": "Sum",
+                "MetricType": "Sum",
                 "RelativeDifference": 0,
                 "TreatmentMetricValue": 0,
             },
@@ -217,7 +217,7 @@ def test_fmt_treatment_badge(test_case, row, snapshot):
             {
                 "MetricId": ["Metric1"],
                 "MetricDisplayName": ["Metric 1"],
-                "MetricKind": ["EventCount"],
+                "MetricType": ["EventCount"],
                 "TreatmentVariant": ["VariantB"],
                 "TreatmentMetricValue": [123],
                 "ControlVariant": ["VariantA"],
@@ -232,7 +232,7 @@ def test_fmt_treatment_badge(test_case, row, snapshot):
             {
                 "MetricId": ["Metric1", "Metric2", "Metric3"],
                 "MetricDisplayName": ["Metric 1", "Metric 2", "Metric 3"],
-                "MetricKind": ["EventCount", "EventRate", "Sum"],
+                "MetricType": ["EventCount", "EventRate", "Sum"],
                 "TreatmentVariant": ["VariantB", "VariantB", "VariantB"],
                 "TreatmentMetricValue": [123, 50.23, 456],
                 "ControlVariant": ["VariantA", "VariantA", "VariantA"],
@@ -247,7 +247,7 @@ def test_fmt_treatment_badge(test_case, row, snapshot):
             {
                 "MetricId": ["Metric1", "Metric1", "Metric1"],
                 "MetricDisplayName": ["Metric 1", "Metric 1", "Metric 1"],
-                "MetricKind": ["EventCount", "EventCount", "EventCount"],
+                "MetricType": ["EventCount", "EventCount", "EventCount"],
                 "TreatmentVariant": ["VariantB", "VariantC", "VariantD"],
                 "TreatmentMetricValue": [123, 234, 345],
                 "ControlVariant": ["VariantA", "VariantA", "VariantA"],
@@ -262,7 +262,7 @@ def test_fmt_treatment_badge(test_case, row, snapshot):
             {
                 "MetricId": ["Metric1", "Metric1", "Metric2", "Metric2"],
                 "MetricDisplayName": ["Metric 1", "Metric 1", "Metric 2", "Metric 2"],
-                "MetricKind": ["EventCount", "EventCount", "EventRate", "EventRate"],
+                "MetricType": ["EventCount", "EventCount", "EventRate", "EventRate"],
                 "TreatmentVariant": ["VariantB", "VariantC", "VariantB", "VariantC"],
                 "TreatmentMetricValue": [123, 234, 50.23, 60.34],
                 "ControlVariant": ["VariantA", "VariantA", "VariantA", "VariantA"],

@@ -63,9 +63,9 @@ def fixture_case_dir(request, monkeypatch):
 
     # pylint: disable-next=unused-argument
     def mock_query_df(credential, workspace, query, *, timespan) -> pd.DataFrame:
-        if "AEWExperimentScorecards" in query:
+        if "OEWExperimentScorecards" in query:
             df = read_analysis(analysis_file)
-        elif "AEWExperimentScorecardMetricPairs" in query:
+        elif "OEWExperimentScorecardMetricPairs" in query:
             df = read_scorecard(scorecard_file)
         else:
             raise ValueError("Unrecognized query")

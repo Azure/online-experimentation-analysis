@@ -22,8 +22,8 @@ SUBSCRIPTION_ID = os.getenv("SUBSCRIPTION_ID")
 RESOURCE_GROUP = os.getenv("RESOURCE_GROUP")
 LOGANALYTICS_WORKSPACE = os.getenv("LOGANALYTICS_WORKSPACE")
 APPCONFIG_FEATURE_FLAG = os.getenv("APPCONFIG_FEATURE_FLAG")
-METRIC_TAGS_ORDER = [
-    x.strip() for x in os.getenv("METRIC_TAGS_ORDER", "").split(",") if x.strip()
+METRIC_CATEGORY_ORDER = [
+    x.strip() for x in os.getenv("METRIC_CATEGORY_ORDER", "").split(",") if x.strip()
 ]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "30"))
 GHA_SUMMARY = os.getenv("GHA_SUMMARY", "true").lower() not in ["false", "0", "no", "n"]
@@ -35,7 +35,7 @@ def main(
     resource_group: str,
     log_analytics_workspace: str,
     feature_flag: str,
-    tags_order: list[str],
+    category_order: list[str],
     lookback_days: int,
 ) -> tuple[Optional[AnalysisResults], str]:
     """Retrieve the latest analysis of an experiment and summarize the results.
@@ -50,9 +50,10 @@ def main(
         Azure Log Analytics workspace name.
     feature_flag: str
         Azure App Configuration feature flag name.
-    tags_order: list[str]
-        Order of metric tags to display in the summary. Unspecified tags are
-        appended in alphabetical order, followed by an 'Untagged' category.
+    category_order: list[str]
+        Specify the order that metric categories are displayed in the summary.
+        Unspecified categories are appended in alphabetical order, followed by
+        an 'Uncategorized' category.
     lookback_days: int
         Number of days to look back for the analysis.
 
@@ -78,7 +79,7 @@ def main(
     if result is None:
         summary = f"Analysis unavailable for feature flag '{feature_flag}'"
     else:
-        summary = summarize(result, tags_order=tags_order, workspace=workspace)
+        summary = summarize(result, category_order=category_order, workspace=workspace)
 
     return result, summary
 
@@ -106,7 +107,7 @@ if __name__ == "__main__":
         resource_group=RESOURCE_GROUP,
         log_analytics_workspace=LOGANALYTICS_WORKSPACE,
         feature_flag=APPCONFIG_FEATURE_FLAG,
-        tags_order=METRIC_TAGS_ORDER,
+        category_order=METRIC_CATEGORY_ORDER,
         lookback_days=LOOKBACK_DAYS,
     )
 
