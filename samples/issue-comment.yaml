@@ -12,7 +12,7 @@ name: Analyze Experiment (issue comment)
 
 # Update for your setup
 env:
-  METRIC_TAGS_ORDER: "Important, Cost, Performance"
+  METRIC_CATEGORY_ORDER: "Important, Cost, Performance"
 
 on:
   issue_comment:
@@ -48,13 +48,13 @@ jobs:
 
       - name: Summarize analysis results
         id: results
-        uses: azure/online-experimentation-analysis@v1-beta
+        uses: azure/online-experimentation-analysis@v2-beta
         with:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ steps.parse.outputs.feature-flag }}
-          metric-tags-order: ${{ env.METRIC_TAGS_ORDER }}
+          metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
 
       - name: Comment on issue
         run: gh issue comment "$NUMBER" --body "$BODY"

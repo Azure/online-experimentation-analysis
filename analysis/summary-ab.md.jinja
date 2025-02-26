@@ -61,20 +61,20 @@ n/a
 > [!TIP]
 > Hover your cursor over a **treatment effect badge** to display the metric value and the p-value of the statistical test.
 
-{%- for tag in tags_order -%}
-{%- set df_tag = df_scorecard[df_scorecard["MetricTag"] == tag] -%}
-{%- set n_metrics_total = df_tag.shape[0] -%}
-{%- set n_metrics_ss = df_tag["TreatmentEffect"].isin(["Degraded", "Improved", "Changed"]).sum() %}
+{%- for category in category_order -%}
+{%- set df_category = df_scorecard[df_scorecard["MetricCategory"] == category] -%}
+{%- set n_metrics_total = df_category.shape[0] -%}
+{%- set n_metrics_ss = df_category["TreatmentEffect"].isin(["Degraded", "Improved", "Changed"]).sum() %}
 
 <details{% if loop.first %} open="true"{% endif %}>
-<summary><strong>{{ tag }}</strong> ({{ n_metrics_ss }} of {{ n_metrics_total }} conclusive)</summary>
+<summary><strong>{{ category }}</strong> ({{ n_metrics_ss }} of {{ n_metrics_total }} conclusive)</summary>
 
-{{ fmt_metric_table(df_tag) }}
+{{ fmt_metric_table(df_category) }}
 
 > <details>
 > <summary><strong>Metric details</strong></summary>
 >
-{% for _, metric in df_tag[["MetricId", "MetricDisplayName", "MetricDescription"]].drop_duplicates().iterrows() -%}
+{% for _, metric in df_category[["MetricId", "MetricDisplayName", "MetricDescription"]].drop_duplicates().iterrows() -%}
 > * ***{{ metric.MetricDisplayName }}:*** {{ strip_commit_hash(metric.MetricDescription) }} {{ fmt_metric_search(metric.MetricId) }}</dd>
 {% endfor -%}
 >
@@ -82,7 +82,7 @@ n/a
 
 </details>
 
-{% endfor %}{# Loop over tags -#}
+{% endfor %}{# Loop over categories -#}
 {%- endif %}{# Empty scorecard -#}
 
 ---

@@ -16,7 +16,7 @@ from .log_analytics import LogAnalyticsWorkspace, query_df
 from .results import AnalysisMetadata, AnalysisResults, VariantMetadata
 
 QUERY_ANALYSIS = """
-AEWExperimentScorecards
+OEWExperimentScorecards
 | where FeatureName == '{{ feature_flag }}'
 {% if allocation_id %}| where AllocationId == '{{ allocation_id }}'{% endif %}
 | summarize arg_max(TimeGenerated, *) by ScorecardId
@@ -27,7 +27,7 @@ AEWExperimentScorecards
 """.strip()
 
 QUERY_SCORECARD = """
-AEWExperimentScorecardMetricPairs
+OEWExperimentScorecardMetricPairs
 | where ScorecardId == '{{ scorecard_id }}'
 | summarize arg_max(TimeGenerated, *) by ScorecardId, MetricId, TreatmentVariant, ControlVariant
 """.strip()
@@ -36,7 +36,7 @@ AEWExperimentScorecardMetricPairs
 def treatment_effect_assessment(df: pd.DataFrame) -> bool:
     """Overall assessment of whether a treatment effect was detected"""
     df_evaluated = df.loc[
-        lambda df: ~df["MetricTags"].str.contains("__Internal__")
+        lambda df: ~df["MetricCategories"].str.contains("__Internal__")
         & ~df["TreatmentEffect"].isin(["Zero samples", "Too few samples"])
         & (df["TreatmentStandardErrorNormalized"] > 0)
         & (df["ControlStandardErrorNormalized"] > 0)

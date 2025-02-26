@@ -18,7 +18,7 @@ from .results import AnalysisResults
 
 SS_THRESHOLD = 0.05
 HSS_THRESHOLD = 0.001
-TAG_UNTAGGED = "Untagged"
+UNCATEGORIZED = "Uncategorized"
 
 DARK_GREEN = "157e3b"
 PALE_GREEN = "a1d99b"
@@ -30,7 +30,7 @@ PALE_YELLOW = "f0e543"
 PALE_GREY = "e6e6e3"
 
 
-def fmt_metric_value(x: np.float64, kind: str) -> str:
+def fmt_metric_value(x: np.float64, metric_type: str) -> str:
     """Format a metric value"""
     if np.isnan(x):
         out = "--"
@@ -38,11 +38,11 @@ def fmt_metric_value(x: np.float64, kind: str) -> str:
         sign = "" if x > 0 else "-"
         out = f"{sign}∞"
 
-    elif kind in ["EventRate", "UserRate"]:
+    elif metric_type in ["EventRate", "UserRate"]:
         dp = 0 if x == 0 or np.isclose(x, 100) else 1
         out = format(x / 100.0, f".{dp}%")
 
-    elif kind in ["EventCount", "UserCount"]:
+    elif metric_type in ["EventCount", "UserCount"]:
         if x >= 1e15:
             out = format(x, ".2e")
         elif x >= 1e12:
@@ -170,7 +170,7 @@ def fmt_treatment_badge(row: pd.Series) -> str:
     """Format a treatment effect as a badge"""
     effect = row["TreatmentEffect"]
     pvalue = row["PValue"]
-    kind = row["MetricKind"]
+    metric_type = row["MetricType"]
     reldiff = row["RelativeDifference"]
     value = row["TreatmentMetricValue"]
 
@@ -206,8 +206,8 @@ def fmt_treatment_badge(row: pd.Series) -> str:
         color = PALE_GREY
         tooltip_stat = ""
 
-    tooltip_value = f"Metric value = {fmt_metric_value(value, kind)}"
-    if kind in ["EventCount", "UserCount", "Sum"]:
+    tooltip_value = f"Metric value = {fmt_metric_value(value, metric_type)}"
+    if metric_type in ["EventCount", "UserCount", "Sum"]:
         tooltip_value += " (comparison accounts for unequal allocation)"
     tooltip_value += "."
 
@@ -223,7 +223,7 @@ def fmt_metric_table(df: pd.DataFrame) -> str:
     control_variant = str(df["ControlVariant"].iloc[0])
 
     def fmt_control_value(row: pd.Series):
-        return fmt_metric_value(row["ControlMetricValue"], row["MetricKind"])
+        return fmt_metric_value(row["ControlMetricValue"], row["MetricType"])
 
     return (
         pd.DataFrame(
@@ -270,7 +270,7 @@ def fmt_metric_search(
 
 def summarize(
     results: AnalysisResults,
-    tags_order: Optional[list[str]] = None,
+    category_order: Optional[list[str]] = None,
     workspace: Optional[LogAnalyticsWorkspace] = None,
 ) -> str:
     """Render experiment analysis results as a markdown summary"""
@@ -285,33 +285,33 @@ def summarize(
     template.globals.update(fmt_metric_search=fmt_metric_search)
     template.globals.update(fmt_badge=fmt_badge)
 
-    def parse_tags(tags_json: str) -> list[str]:
+    def parse_categories(categories_json: str) -> list[str]:
         try:
-            tags_list = list(json.loads(tags_json))
+            categories_list = list(json.loads(categories_json))
         except json.JSONDecodeError:
-            tags_list = []
+            categories_list = []
 
-        return tags_list if len(tags_list) > 0 else [TAG_UNTAGGED]
+        return categories_list if len(categories_list) > 0 else [UNCATEGORIZED]
 
-    # explode metric tags + hide internal metrics
+    # explode metric categories + hide internal metrics
     df_processed = (
         results.scorecard.assign(
-            MetricTags=lambda df: df["MetricTags"].apply(parse_tags)
+            MetricCategories=lambda df: df["MetricCategories"].apply(parse_categories)
         )
-        .explode("MetricTags")
-        .rename(columns={"MetricTags": "MetricTag"})
-        .loc[lambda df: ~df["MetricTag"].str.startswith("__")]
+        .explode("MetricCategories")
+        .rename(columns={"MetricCategories": "MetricCategory"})
+        .loc[lambda df: ~df["MetricCategory"].str.startswith("__")]
         .sort_values("MetricDisplayName")
     )
 
-    # show requested tag order, then others alphabetically, then untagged
-    if tags_order is None:
-        tags_order = []
-    tags_observed = set(df_processed["MetricTag"].to_list())
-    tags_order = [tag for tag in tags_order if tag in tags_observed]
-    tags_order += sorted(tags_observed - set(tags_order) - {TAG_UNTAGGED})
-    if TAG_UNTAGGED in tags_observed:
-        tags_order.append(TAG_UNTAGGED)
+    # show requested category order, then others alphabetically, then uncategorized
+    if category_order is None:
+        category_order = []
+    categories_found = set(df_processed["MetricCategory"].to_list())
+    category_order = [c for c in category_order if c in categories_found]
+    category_order += sorted(categories_found - set(category_order) - {UNCATEGORIZED})
+    if UNCATEGORIZED in categories_found:
+        category_order.append(UNCATEGORIZED)
 
     if workspace is not None:
         url_workbook = analysis_workbook_url(workspace, results.analysis)
@@ -322,5 +322,5 @@ def summarize(
         df_scorecard=df_processed,
         analysis=results.analysis,
         url_workbook=url_workbook,
-        tags_order=tags_order,
+        category_order=category_order,
     )
