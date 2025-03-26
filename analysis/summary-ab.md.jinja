@@ -2,9 +2,11 @@
 Copyright (c) Microsoft Corporation.
 Licensed under the MIT license.
 -#}
-{%- macro fmt_srm_badge(is_control, is_srm) -%}
+{%- macro fmt_srm_badge(is_control, is_srm, total_assigned) -%}
 {%- if is_control -%}
 n/a
+{%- elif total_assigned < 12 -%}
+  {{ fmt_badge(label="Data quality", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable analysis.") }}
 {%- elif is_srm -%}
 {{ fmt_badge(label="SRM check", message="Fail", color="Fail", tooltip="Sample ratio mismatch detected.") }}
 {%- else -%}
@@ -21,6 +23,15 @@ n/a
 {{ fmt_badge(label="Change", message="Undetected", color="Inconclusive", tooltip="Observed metric movements are consistent with statistical noise.\nEither the experiment is underpowered or had limited impact on the metrics.") }}
 {%- endif -%}
 {%- endmacro -%}
+
+
+{# Calculate total assigned users: first get control's assigned_users, then add treatment's assigned_users #}
+{% set control_assigned = 0 %}
+{% for variant in analysis.variants %}
+  {% if variant.is_control %}
+    {% set control_assigned = variant.assigned_users | int %}
+  {% endif %}
+{% endfor %}
 
 ## Experiment analysis
 
@@ -40,7 +51,7 @@ n/a
 | Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
 |:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
 {% for variant in analysis.variants -%}
-| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
+| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm, variant.control_assigned + variant.assigned_users | ) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
 {% endfor -%}
 
 {%- if analysis.is_any_srm %}
