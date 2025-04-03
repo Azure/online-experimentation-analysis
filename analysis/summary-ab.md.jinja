@@ -24,13 +24,6 @@ n/a
 {%- endif -%}
 {%- endmacro -%}
 
-{# Calculate total assigned users: first get control's assigned_users, then add treatment's assigned_users #}
-{% set control_assigned = 0 %}
-{% for variant in analysis.variants %}
-  {% if variant.is_control %}
-    {% set control_assigned = variant.assigned_users | int %}
-  {% endif %}
-{% endfor %}
 
 ## Experiment analysis
 
@@ -43,6 +36,14 @@ n/a
 * 🔬 **Allocation ID:** {{ analysis.allocation_id }}
 * 📅 **Analysis period:** {{ '{:.1f}'.format((analysis.end_time - analysis.start_time).total_seconds() / (24 * 60 * 60)) }} days ({{ analysis.start_time.strftime("%m/%d/%Y %H:%M") }} - {{ analysis.end_time.strftime("%m/%d/%Y %H:%M") }} UTC)
 * 🔖 **Scorecard ID:** {{ analysis.scorecard_id }}
+
+{# Calculate total assigned users: first get control's assigned_users, then add treatment's assigned_users #}
+{% set control_assigned = 0 %}
+{% for variant in analysis.variants %}
+  {% if variant.is_control %}
+    {% set control_assigned = variant.assigned_users | int %}
+  {% endif %}
+{% endfor %}
 
 ### Summary of variants
 
