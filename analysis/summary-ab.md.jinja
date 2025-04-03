@@ -31,7 +31,6 @@ n/a
     {% set control_assigned = variant.assigned_users | int -%}
   {% endif -%}
 {% endfor -%}
-
 ## Experiment analysis
 
 {% if url_workbook|default('') -%}
@@ -43,7 +42,6 @@ n/a
 * 🔬 **Allocation ID:** {{ analysis.allocation_id }}
 * 📅 **Analysis period:** {{ '{:.1f}'.format((analysis.end_time - analysis.start_time).total_seconds() / (24 * 60 * 60)) }} days ({{ analysis.start_time.strftime("%m/%d/%Y %H:%M") }} - {{ analysis.end_time.strftime("%m/%d/%Y %H:%M") }} UTC)
 * 🔖 **Scorecard ID:** {{ analysis.scorecard_id }}
-
 
 ### Summary of variants
 
