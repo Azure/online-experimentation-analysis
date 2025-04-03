@@ -51,7 +51,7 @@ n/a
 | Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
 |:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
 {% for variant in analysis.variants -%}
-| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm, variant.control_assigned + variant.assigned_users) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
+| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm, control_assigned + variant.assigned_users) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
 {% endfor -%}
 
 {%- if analysis.is_any_srm %}
