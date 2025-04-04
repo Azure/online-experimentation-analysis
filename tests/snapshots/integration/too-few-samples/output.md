@@ -11,10 +11,10 @@
 
 | Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
 |:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
-| Variant1 | Control | 50% | 1,000 | n/a | n/a |
-| Variant2 | Treatment | 50% | 1,000 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Detected](https://img.shields.io/badge/Change-Detected-1c72af "Observed metric movements are inconsistent with statistical noise.") |
-| Variant3 | Treatment | 50% | 1,000 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Undetected](https://img.shields.io/badge/Change-Undetected-e6e6e3 "Observed metric movements are consistent with statistical noise.&#013;Either the experiment is underpowered or had limited impact on the metrics.") |
-| Variant4 | Treatment | 50% | 1,000 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Detected](https://img.shields.io/badge/Change-Detected-1c72af "Observed metric movements are inconsistent with statistical noise.") |
+| Variant1 | Control | 50% | 5 | n/a | n/a |
+| Variant2 | Treatment | 50% | 6 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Detected](https://img.shields.io/badge/Change-Detected-1c72af "Observed metric movements are inconsistent with statistical noise.") |
+| Variant3 | Treatment | 50% | 7 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Undetected](https://img.shields.io/badge/Change-Undetected-e6e6e3 "Observed metric movements are consistent with statistical noise.&#013;Either the experiment is underpowered or had limited impact on the metrics.") |
+| Variant4 | Treatment | 50% | 8 | ![SRM check: Pass](https://img.shields.io/badge/SRM%20check-Pass-157e3b "No sample ratio mismatch detected.") | ![Change: Detected](https://img.shields.io/badge/Change-Detected-1c72af "Observed metric movements are inconsistent with statistical noise.") |
 
 
 ### Metric results
