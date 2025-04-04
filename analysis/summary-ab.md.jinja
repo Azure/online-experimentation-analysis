@@ -24,6 +24,9 @@ n/a
 {%- endif -%}
 {%- endmacro -%}
 
+{%- set control_row = analysis.variants | selectattr('is_control','equalto',True) | first -%}
+{%- set control_assigned_users = control_row.assigned_users -%}
+
 ## Experiment analysis
 
 {% if url_workbook|default('') -%}
