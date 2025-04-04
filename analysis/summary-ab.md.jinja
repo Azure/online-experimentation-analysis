@@ -24,22 +24,14 @@ n/a
 {%- endif -%}
 {%- endmacro -%}
 
-{#- Calculate total assigned users: first get control's assigned_users, then add treatment's assigned_users -#}
-{%- set control_assigned = 0 -%}
-{%- for variant in analysis.variants -%}
-  {%- if variant.is_control -%}
-    {%- set control_assigned = variant.assigned_users | int -%}
-  {%- endif -%}
-{%- endfor -%}
-
-{% set base_row = analysis.variants | selectattr('is_control','equalto',True) | first %}
-{% set base_number = base_row.assigned_users %}
+{% set control_row = analysis.variants | selectattr('is_control','equalto',True) | first %}
+{% set control_assigned_users = control_row.assigned_users %}
 {#- Debug information -#}
 ### Debug Information
 | Control Assigned Value |
 |:----------------------|
-{%- for variant in analysis.variants -%}
-| {{ base_number + variant.assigned_users }} |
+{% for variant in analysis.variants %}
+| {{ control_assigned_users + variant.assigned_users }} |
 {%- endfor -%}
 
 ## Experiment analysis
@@ -61,7 +53,7 @@ n/a
 | Variant 💊 | Type | Allocation | Assignment | Data quality | Treatment effect |
 |:--------|:-----|-----------:|-----------:|:------------:|:----------------:|
 {% for variant in analysis.variants -%}
-| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm, control_assigned + variant.assigned_users) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
+| {{ variant.variant }} | {% if variant.is_control %}Control{% else %}Treatment{% endif %} | {{ '{:.0%}'.format(variant.allocated_pct / 100) }} | {{ '{:,}'.format(variant.assigned_users|int) }} | {{ fmt_srm_badge(variant.is_control, variant.is_srm, control_assigned_users + variant.assigned_users) }} | {{ fmt_tea_badge(variant.is_control, variant.is_tea) }} |
 {% endfor -%}
 
 {%- if analysis.is_any_srm %}
