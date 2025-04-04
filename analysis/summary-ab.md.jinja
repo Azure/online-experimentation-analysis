@@ -34,10 +34,8 @@ n/a
 
 {% set base_row = analysis.variants | selectattr("is_control", "equalto", True) | first %}
 {% set base_number = base_row.number %}
-
 {#- Debug information -#}
 ### Debug Information
-
 | Variant | Is Control | Assigned Users | Control Assigned Value |
 |:--------|:-----------|:---------------|:----------------------|
 {%- for variant in analysis.variants -%}
