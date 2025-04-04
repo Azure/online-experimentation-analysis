@@ -5,7 +5,7 @@ Licensed under the MIT license.
 {%- macro fmt_srm_badge(is_control, is_srm, total_assigned) -%}
 {%- if is_control -%}
 n/a
-{%- elif total_assigned < 12 -%}
+{%- elif total_assigned < 13 -%}
   {{ fmt_badge(label="Data quality", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable analysis.") }}
 {%- elif is_srm -%}
 {{ fmt_badge(label="SRM check", message="Fail", color="Fail", tooltip="Sample ratio mismatch detected.") }}
@@ -31,6 +31,17 @@ n/a
     {%- set control_assigned = variant.assigned_users | int -%}
   {%- endif -%}
 {%- endfor -%}
+
+{#- Debug information -#}
+### Debug Information
+
+| Variant | Is Control | Assigned Users | Control Assigned Value |
+|:--------|:-----------|:---------------|:----------------------|
+{%- for variant in analysis.variants -%}
+| {{ variant.variant }} | {{ variant.is_control }} | {{ variant.assigned_users }} | {% if loop.first %}{{ control_assigned }}{% endif %} |
+{%- endfor -%}
+
+## Experiment analysis
 ## Experiment analysis
 
 {% if url_workbook|default('') -%}
