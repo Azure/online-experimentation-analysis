@@ -6,7 +6,7 @@ Licensed under the MIT license.
 {%- if is_control -%}
 n/a
 {%- elif total_assigned < 13 -%}
-  {{ fmt_badge(label="Data quality", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable analysis.") }}
+  {{ fmt_badge(label="Data quality", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable SRM analysis.") }}
 {%- elif is_srm -%}
 {{ fmt_badge(label="SRM check", message="Fail", color="Fail", tooltip="Sample ratio mismatch detected.") }}
 {%- else -%}
@@ -24,17 +24,6 @@ n/a
 {%- endif -%}
 {%- endmacro -%}
 
-{% set control_row = analysis.variants | selectattr('is_control','equalto',True) | first %}
-{% set control_assigned_users = control_row.assigned_users %}
-{#- Debug information -#}
-### Debug Information
-| Control Assigned Value |
-|:----------------------|
-{% for variant in analysis.variants %}
-| {{ control_assigned_users + variant.assigned_users }} |
-{%- endfor -%}
-
-## Experiment analysis
 ## Experiment analysis
 
 {% if url_workbook|default('') -%}
