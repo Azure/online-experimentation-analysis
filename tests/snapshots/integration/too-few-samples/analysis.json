@@ -1,0 +1,37 @@
+{
+  "ScorecardId": "test_scorecard",
+  "FeatureName": "test_feature",
+  "AllocationId": "test_allocation",
+  "AnalysisStartTime": "2024-01-01T00:00:00",
+  "AnalysisEndTime": "2024-01-31T00:00:00",
+  "Variants": [
+    {
+      "Variant": "Variant1",
+      "IsControlVariant": true,
+      "VariantAssignmentPercentage": 50.0,
+      "AssignmentUserCount": 5,
+      "SampleRatioMismatchPValue": 1.0
+    },
+    {
+      "Variant": "Variant2",
+      "IsControlVariant": false,
+      "VariantAssignmentPercentage": 50.0,
+      "AssignmentUserCount": 6,
+      "SampleRatioMismatchPValue": 1.0
+    },
+    {
+      "Variant": "Variant3",
+      "IsControlVariant": false,
+      "VariantAssignmentPercentage": 50.0,
+      "AssignmentUserCount": 7,
+      "SampleRatioMismatchPValue": 1.0
+    },
+    {
+      "Variant": "Variant4",
+      "IsControlVariant": false,
+      "VariantAssignmentPercentage": 50.0,
+      "AssignmentUserCount": 8,
+      "SampleRatioMismatchPValue": 1.0
+    }
+  ]
+}
