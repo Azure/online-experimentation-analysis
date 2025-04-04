@@ -32,14 +32,14 @@ n/a
   {%- endif -%}
 {%- endfor -%}
 
-{% set base_row = analysis.variants | selectattr("is_control", "equalto", True) | first %}
+{% set base_row = analysis.variants | first %}
 {% set base_number = base_row.number %}
 {#- Debug information -#}
 ### Debug Information
-| Variant | Is Control | Assigned Users | Control Assigned Value |
-|:--------|:-----------|:---------------|:----------------------|
+| Control Assigned Value |
+|:----------------------|
 {%- for variant in analysis.variants -%}
-| {{ variant.variant }} | {{ variant.is_control }} | {{ variant.assigned_users }} | {% if loop.first %}{{ base_number }}{% endif %} |
+| {{ base_number }} |
 {%- endfor -%}
 
 ## Experiment analysis
