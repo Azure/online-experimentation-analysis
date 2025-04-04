@@ -32,7 +32,7 @@ n/a
   {%- endif -%}
 {%- endfor -%}
 
-{% set base_row = analysis.variants | first %}
+{% set base_row = analysis.variants | selectattr('is_control','equalto',True) | first %}
 {% set base_number = base_row.assigned_users %}
 {#- Debug information -#}
 ### Debug Information
