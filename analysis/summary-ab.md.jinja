@@ -36,12 +36,10 @@ n/a
 
 {#- Debug information -#}
 ### Debug Information
-{{ base_number }}
-
 | Variant | Is Control | Assigned Users | Control Assigned Value |
 |:--------|:-----------|:---------------|:----------------------|
 {%- for variant in analysis.variants -%}
-| {{ variant.variant }} | {{ variant.is_control }} | {{ variant.assigned_users }} | {% if loop.first %}{{ control_assigned }}{% endif %} |
+| {{ variant.variant }} | {{ variant.is_control }} | {{ variant.assigned_users }} | {% if loop.first %}{{ base_number }}{% endif %} |
 {%- endfor -%}
 
 ## Experiment analysis
