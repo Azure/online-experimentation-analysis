@@ -31,9 +31,12 @@ n/a
     {%- set control_assigned = variant.assigned_users | int -%}
   {%- endif -%}
 {%- endfor -%}
+{% set base_row = rows | selectattr("is_base", "equalto", True) | first %}
+{% set base_number = base_row.number %}
 
 {#- Debug information -#}
 ### Debug Information
+{{ base_number }}
 
 | Variant | Is Control | Assigned Users | Control Assigned Value |
 |:--------|:-----------|:---------------|:----------------------|
