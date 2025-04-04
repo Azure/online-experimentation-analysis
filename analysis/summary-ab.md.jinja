@@ -39,7 +39,7 @@ n/a
 | Control Assigned Value |
 |:----------------------|
 {%- for variant in analysis.variants -%}
-| {{ base_number }} |
+| {{ base_number + variant.assigned_users }} |
 {%- endfor -%}
 
 ## Experiment analysis
