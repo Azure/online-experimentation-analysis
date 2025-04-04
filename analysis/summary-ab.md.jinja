@@ -6,7 +6,7 @@ Licensed under the MIT license.
 {%- if is_control -%}
 n/a
 {%- elif total_assigned < 13 -%}
-  {{ fmt_badge(label="Data quality", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable SRM analysis.") }}
+  {{ fmt_badge(label="SRM check", message="Too few samples", color="Warning", tooltip="Not enough assigned users for reliable SRM analysis.") }}
 {%- elif is_srm -%}
 {{ fmt_badge(label="SRM check", message="Fail", color="Fail", tooltip="Sample ratio mismatch detected.") }}
 {%- else -%}
