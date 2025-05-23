@@ -127,7 +127,7 @@ if __name__ == "__main__":
         title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG} '{label_str}'"
         msg = (
             f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}'"
-            " {label_str}. Is the first analysis still pending?"
+            f" {label_str}. Is the first analysis still pending?"
         )
 
         # highlight within GitHub Action annotations
