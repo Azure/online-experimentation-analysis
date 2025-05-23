@@ -85,6 +85,7 @@ def extract_metadata(df: pd.DataFrame) -> Optional[AnalysisMetadata]:
         ],
     )
 
+
 # pylint: disable=too-many-arguments
 def latest_analysis(
     credential,
