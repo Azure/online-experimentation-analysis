@@ -7,7 +7,7 @@ charset-normalizer==3.4.0
 cryptography==43.0.3
 idna==3.10
 isodate==0.7.2
-Jinja2==3.1.4
+Jinja2==3.1.6
 MarkupSafe==3.0.2
 msal==1.31.0
 msal-extensions==1.2.0
