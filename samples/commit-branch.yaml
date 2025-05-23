@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Read running experiments from config file
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '' && github.event.inputs.app-configuration-feature-flag == '')
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '')
         run: echo "FEATURE_FLAGS=$(jq -c -n '[inputs.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
 
       - name: Propagate specified feature flag

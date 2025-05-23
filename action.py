@@ -82,7 +82,9 @@ def main(
     )
 
     if result is None:
-        summary = f"Analysis unavailable for feature flag '{feature_flag}' and label '{label}'"
+        summary = f"Analysis unavailable for feature flag '{feature_flag}''"
+        if label:
+            summary += f" with label '{label}'"
     else:
         summary = summarize(result, category_order=category_order, workspace=workspace)
 
@@ -121,9 +123,10 @@ if __name__ == "__main__":
 
     # if analysis not found, exit gracefully (may be expected)
     if results is None:
-        title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG} with label '{APPCONFIG_LABEL}'"
+        label_str = f" with label '{APPCONFIG_LABEL}'" if APPCONFIG_LABEL else ""
+        title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG} '{label_str}'"
         msg = (
-            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}' and label '{APPCONFIG_LABEL}'."
+            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}' '{label_str}'."
             " Is the first analysis still pending?"
         )
 

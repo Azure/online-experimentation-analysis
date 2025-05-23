@@ -56,5 +56,5 @@ jobs:
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ vars.TEST_FEATURE_FLAG }}
-          #app-configuration-label: ${{ vars.TEST_LABEL }}
+          app-configuration-label: ${{ vars.TEST_LABEL }}
           metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
