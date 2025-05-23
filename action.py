@@ -82,7 +82,7 @@ def main(
     )
 
     if result is None:
-        summary = f"Analysis unavailable for feature flag '{feature_flag}''"
+        summary = f"Analysis unavailable for feature flag '{feature_flag}'"
         if label:
             summary += f" with label '{label}'"
     else:
