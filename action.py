@@ -109,7 +109,7 @@ if __name__ == "__main__":
     if not APPCONFIG_FEATURE_FLAG:
         raise ValueError("Missing input: app-configuration-feature-flag")
     if not APPCONFIG_LABEL:
-        APPCONFIG_LABEL = '' # default to no label
+        APPCONFIG_LABEL = ""  # default to no label
 
     results, summary_md = main(
         subscription_id=SUBSCRIPTION_ID,
@@ -126,8 +126,8 @@ if __name__ == "__main__":
         label_str = f" with label '{APPCONFIG_LABEL}'" if APPCONFIG_LABEL else ""
         title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG} '{label_str}'"
         msg = (
-            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}' '{label_str}'."
-            " Is the first analysis still pending?"
+            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}'"
+            " {label_str}. Is the first analysis still pending?"
         )
 
         # highlight within GitHub Action annotations
