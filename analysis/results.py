@@ -56,6 +56,8 @@ class AnalysisMetadata:
 
     feature_flag: str
     """Name of the feature flag"""
+    label: str
+    """Label of the feature flag"""
     allocation_id: str
     """ID of the allocation"""
     scorecard_id: str

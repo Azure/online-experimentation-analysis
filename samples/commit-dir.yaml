@@ -17,6 +17,7 @@ name: Analyze Experiments
 env:
   ANALYSIS_DIR: .config/analysis
   APP_CONFIGURATION_FILE: .config/feature-flags.json
+  APP_CONFIGURATION_LABEL: "Dev"
   METRIC_CATEGORY_ORDER: "Important, Cost, Performance"
 
 on:
@@ -82,6 +83,7 @@ jobs:
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ matrix.feature-flag }}
+          app-configuration-label: ${{ env.APP_CONFIGURATION_LABEL }}
           metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
 
       - name: Save results to file

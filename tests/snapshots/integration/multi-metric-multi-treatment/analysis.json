@@ -1,6 +1,7 @@
 {
   "ScorecardId": "test_scorecard",
   "FeatureName": "test_feature",
+  "Label": "test_label",
   "AllocationId": "test_allocation",
   "AnalysisStartTime": "2024-01-01T00:00:00",
   "AnalysisEndTime": "2024-01-31T00:00:00",

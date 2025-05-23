@@ -14,6 +14,9 @@ inputs:
   app-configuration-feature-flag:
     description: "The App Configuration feature flag of the experiment."
     required: true
+  app-configuration-label:
+    description: "The App Configuration label. Default to no label."
+    required: false
   metric-category-order:
     description: >
       The analysis summary displays metrics grouped by their categories. This input specifies the display order
@@ -64,6 +67,7 @@ runs:
         RESOURCE_GROUP: ${{ inputs.resource-group }}
         LOGANALYTICS_WORKSPACE: ${{ inputs.log-analytics-workspace }}
         APPCONFIG_FEATURE_FLAG: ${{ inputs.app-configuration-feature-flag }}
+        APPCONFIG_LABEL: ${{ inputs.app-configuration-label }}
         METRIC_CATEGORY_ORDER: ${{ inputs.metric-category-order }}
         LOOKBACK_DAYS: ${{ inputs.lookback-days }}
         GHA_SUMMARY: ${{ inputs.github-actions-summary }}

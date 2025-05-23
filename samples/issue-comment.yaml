@@ -13,7 +13,7 @@ name: Analyze Experiment (issue comment)
 # Update for your setup
 env:
   METRIC_CATEGORY_ORDER: "Important, Cost, Performance"
-
+  APP_CONFIGURATION_LABEL: "Dev"
 on:
   issue_comment:
     types: [created]
@@ -54,6 +54,7 @@ jobs:
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ steps.parse.outputs.feature-flag }}
+          app-configuration-label: ${{ env.APP_CONFIGURATION_LABEL }}
           metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
 
       - name: Comment on issue

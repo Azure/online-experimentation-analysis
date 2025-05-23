@@ -28,6 +28,7 @@ args_treatment = {
 }
 args_metadata = {
     "feature_flag": "test_feature",
+    "label": "test_label",
     "allocation_id": "test_allocation",
     "scorecard_id": "test_scorecard",
     "start_time": datetime(2024, 1, 1),
@@ -76,6 +77,7 @@ def test_analysis_metadata():
         **args_metadata, variants=[variant_control, variant_treatment]
     )
     assert metadata.feature_flag == "test_feature"
+    assert metadata.label == "test_label"
     assert metadata.allocation_id == "test_allocation"
     assert metadata.scorecard_id == "test_scorecard"
     assert metadata.start_time == datetime(2024, 1, 1)

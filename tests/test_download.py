@@ -17,6 +17,7 @@ def test_extract_metadata():
     df = pd.DataFrame({
         "ScorecardId": ["test_scorecard"],
         "FeatureName": ["test_feature"],
+        "Label": ["test_label"],
         "AllocationId": ["test_allocation"],
         "AnalysisStartTime": [pd.Timestamp("2023-01-01 00:00:00")],
         "AnalysisEndTime": [pd.Timestamp("2023-01-02 00:00:00")],
@@ -43,6 +44,7 @@ def test_extract_metadata():
 
     assert metadata is not None
     assert metadata.feature_flag == "test_feature"
+    assert metadata.label == "test_label"
     assert metadata.allocation_id == "test_allocation"
     assert metadata.scorecard_id == "test_scorecard"
     assert metadata.start_time == datetime(2023, 1, 1)
@@ -79,6 +81,7 @@ def test_extract_metadata_invalid_variants():
     df = pd.DataFrame({
         "ScorecardId": ["test_scorecard"],
         "FeatureName": ["test_feature"],
+        "Label": ["test_label"],
         "AllocationId": ["test_allocation"],
         "AnalysisStartTime": [pd.Timestamp("2023-01-01 00:00:00")],
         "AnalysisEndTime": [pd.Timestamp("2023-01-02 00:00:00")],
@@ -90,6 +93,7 @@ def test_extract_metadata_invalid_variants():
 
     assert metadata is not None
     assert metadata.feature_flag == "test_feature"
+    assert metadata.label == "test_label"
     assert metadata.allocation_id == "test_allocation"
     assert metadata.scorecard_id == "test_scorecard"
     assert metadata.start_time == datetime(2023, 1, 1)
