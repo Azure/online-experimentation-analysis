@@ -35,7 +35,7 @@ n/a
 {%- endif %}
 
 * ✨ **Feature flag:** {{ analysis.feature_flag }}
-* 🏷️ **Label:** {{ analysis.label }}
+* 🏷️ **Label:** {{ analysis.label or '(no label)' }}
 * 🔬 **Allocation ID:** {{ analysis.allocation_id }}
 * 📅 **Analysis period:** {{ '{:.1f}'.format((analysis.end_time - analysis.start_time).total_seconds() / (24 * 60 * 60)) }} days ({{ analysis.start_time.strftime("%m/%d/%Y %H:%M") }} - {{ analysis.end_time.strftime("%m/%d/%Y %H:%M") }} UTC)
 * 🔖 **Scorecard ID:** {{ analysis.scorecard_id }}
