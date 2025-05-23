@@ -22,7 +22,8 @@ OEWExperimentScorecards
 | summarize arg_max(TimeGenerated, *) by ScorecardId
 | summarize arg_max(TimeGenerated, *) by AnalysisEndTime
 | summarize arg_max(AnalysisEndTime, *)
-| project ScorecardId, FeatureName, Label, AllocationId, AnalysisStartTime, AnalysisEndTime, Variants=Insights.Assignment
+| project ScorecardId, FeatureName, Label, AllocationId, AnalysisStartTime, AnalysisEndTime, 
+          Variants=Insights.Assignment
 | where FeatureName == '{{ feature_flag }}' and Label == '{{ label }}'
 """.strip()
 
@@ -84,7 +85,7 @@ def extract_metadata(df: pd.DataFrame) -> Optional[AnalysisMetadata]:
         ],
     )
 
-
+# pylint: disable=too-many-arguments
 def latest_analysis(
     credential,
     workspace: LogAnalyticsWorkspace,
