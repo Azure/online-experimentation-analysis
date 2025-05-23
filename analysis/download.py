@@ -22,7 +22,7 @@ OEWExperimentScorecards
 | summarize arg_max(TimeGenerated, *) by ScorecardId
 | summarize arg_max(TimeGenerated, *) by AnalysisEndTime
 | summarize arg_max(AnalysisEndTime, *)
-| project ScorecardId, FeatureName, Label, AllocationId, AnalysisStartTime, AnalysisEndTime, 
+| project ScorecardId, FeatureName, Label, AllocationId, AnalysisStartTime, AnalysisEndTime,
           Variants=Insights.Assignment
 | where FeatureName == '{{ feature_flag }}' and Label == '{{ label }}'
 """.strip()
