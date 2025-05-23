@@ -80,6 +80,7 @@ def analysis_workbook_url(
             "durationMs": 7776000000
         },
         "FeatureName": analysis.feature_flag,
+        "Label": analysis.label,
         "AllocationId": analysis.allocation_id,
     }
 

@@ -15,6 +15,7 @@ name: Analyze Experiments
 env:
   ANALYSIS_BRANCH: analysis-results
   APP_CONFIGURATION_FILE: .config/feature-flags.json
+  APP_CONFIGURATION_LABEL: "Dev"
   METRIC_CATEGORY_ORDER: "Important, Cost, Performance"
 
 on:
@@ -41,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Read running experiments from config file
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '')
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.app-configuration-feature-flag == '' && github.event.inputs.app-configuration-feature-flag == '')
         run: echo "FEATURE_FLAGS=$(jq -c -n '[inputs.feature_management.feature_flags[] | select(.enabled and .allocation.percentile) | .id]' ${{ env.APP_CONFIGURATION_FILE }})" >> $GITHUB_ENV
 
       - name: Propagate specified feature flag
@@ -80,6 +81,7 @@ jobs:
           resource-group: ${{ vars.LOG_ANALYTICS_WORKSPACE_RESOURCE_GROUP }}
           log-analytics-workspace: ${{ vars.LOG_ANALYTICS_WORKSPACE_NAME }}
           app-configuration-feature-flag: ${{ matrix.feature-flag }}
+          app-configuration-label: ${{ env.APP_CONFIGURATION_LABEL }}
           metric-category-order: ${{ env.METRIC_CATEGORY_ORDER }}
 
       - name: Save results to file

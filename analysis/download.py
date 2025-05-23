@@ -17,13 +17,13 @@ from .results import AnalysisMetadata, AnalysisResults, VariantMetadata
 
 QUERY_ANALYSIS = """
 OEWExperimentScorecards
-| where FeatureName == '{{ feature_flag }}'
+| where FeatureName == '{{ feature_flag }}' and Label == '{{ label }}'
 {% if allocation_id %}| where AllocationId == '{{ allocation_id }}'{% endif %}
 | summarize arg_max(TimeGenerated, *) by ScorecardId
 | summarize arg_max(TimeGenerated, *) by AnalysisEndTime
 | summarize arg_max(AnalysisEndTime, *)
-| project ScorecardId, FeatureName, AllocationId, AnalysisStartTime, AnalysisEndTime, Variants=Insights.Assignment
-| where FeatureName == '{{ feature_flag }}'
+| project ScorecardId, FeatureName, Label, AllocationId, AnalysisStartTime, AnalysisEndTime, Variants=Insights.Assignment
+| where FeatureName == '{{ feature_flag }}' and Label == '{{ label }}'
 """.strip()
 
 QUERY_SCORECARD = """
@@ -66,6 +66,7 @@ def extract_metadata(df: pd.DataFrame) -> Optional[AnalysisMetadata]:
 
     return AnalysisMetadata(
         feature_flag=config["FeatureName"],
+        label=config["Label"],
         allocation_id=config["AllocationId"],
         scorecard_id=config["ScorecardId"],
         start_time=config["AnalysisStartTime"].to_pydatetime(),
@@ -89,6 +90,7 @@ def latest_analysis(
     workspace: LogAnalyticsWorkspace,
     *,
     feature_flag: str,
+    label: str,
     allocation_id: Optional[str],
     timespan: timedelta | tuple[datetime, timedelta] | tuple[datetime, datetime]
 ) -> Optional[AnalysisResults]:
@@ -101,7 +103,9 @@ def latest_analysis(
     workspace: LogAnalyticsWorkspace
         Azure Log Analytics workspace storing analysis results.
     feature_flag: str
-        Azure App Config feature flag name.
+        Azure App Configuration feature flag name.
+    label: str
+        Azure App Configuration label
     allocation_id: Optional[str]
         Allocation ID for the experiment. If unspecified, the latest experiment is selected.
     timespan: timedelta | tuple[datetime, timedelta] | tuple[datetime, datetime]
@@ -109,7 +113,7 @@ def latest_analysis(
     """
     # find the latest experiment analysis (latest allocation + date range)
     query = Template(QUERY_ANALYSIS).render(
-        feature_flag=feature_flag, allocation_id=allocation_id
+        feature_flag=feature_flag, label=label, allocation_id=allocation_id
     )
     df_analysis = query_df(credential, workspace, query, timespan=timespan)
     analysis = extract_metadata(df_analysis)

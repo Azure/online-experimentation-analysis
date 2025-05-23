@@ -22,6 +22,7 @@ def read_analysis(path: Path) -> pd.DataFrame:
     dtypes = {
         "ScorecardId": str,
         "FeatureName": str,
+        "Label": str,
         "AllocationId": str,
         "AnalysisStartTime": str,
         "AnalysisEndTime": str,
@@ -81,7 +82,7 @@ def fixture_case_dir(request, monkeypatch):
 def test_summarize(case_dir, snapshot):
     """Integration snapshot test for the analysis summary."""
     _ = None
-    result = latest_analysis(_, _, feature_flag=_, allocation_id=_, timespan=_)
+    result = latest_analysis(_, _, feature_flag=_, label=_, allocation_id=_, timespan=_)
     summary = summarize(result)
 
     snapshot.snapshot_dir = case_dir

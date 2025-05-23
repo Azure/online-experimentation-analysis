@@ -22,6 +22,7 @@ SUBSCRIPTION_ID = os.getenv("SUBSCRIPTION_ID")
 RESOURCE_GROUP = os.getenv("RESOURCE_GROUP")
 LOGANALYTICS_WORKSPACE = os.getenv("LOGANALYTICS_WORKSPACE")
 APPCONFIG_FEATURE_FLAG = os.getenv("APPCONFIG_FEATURE_FLAG")
+APPCONFIG_LABEL = os.getenv("APPCONFIG_LABEL")
 METRIC_CATEGORY_ORDER = [
     x.strip() for x in os.getenv("METRIC_CATEGORY_ORDER", "").split(",") if x.strip()
 ]
@@ -35,6 +36,7 @@ def main(
     resource_group: str,
     log_analytics_workspace: str,
     feature_flag: str,
+    label: str,
     category_order: list[str],
     lookback_days: int,
 ) -> tuple[Optional[AnalysisResults], str]:
@@ -50,6 +52,8 @@ def main(
         Azure Log Analytics workspace name.
     feature_flag: str
         Azure App Configuration feature flag name.
+    label: str
+        Azure App Configuration label.
     category_order: list[str]
         Specify the order that metric categories are displayed in the summary.
         Unspecified categories are appended in alphabetical order, followed by
@@ -72,12 +76,13 @@ def main(
         DefaultAzureCredential(),
         workspace=workspace,
         feature_flag=feature_flag,
+        label=label,
         allocation_id=None,
         timespan=timedelta(days=lookback_days),
     )
 
     if result is None:
-        summary = f"Analysis unavailable for feature flag '{feature_flag}'"
+        summary = f"Analysis unavailable for feature flag '{feature_flag}' and label '{label}'"
     else:
         summary = summarize(result, category_order=category_order, workspace=workspace)
 
@@ -101,21 +106,24 @@ if __name__ == "__main__":
         raise ValueError("Missing input: log-analytics-workspace")
     if not APPCONFIG_FEATURE_FLAG:
         raise ValueError("Missing input: app-configuration-feature-flag")
+    if not APPCONFIG_LABEL:
+        APPCONFIG_LABEL = '' # default to no label
 
     results, summary_md = main(
         subscription_id=SUBSCRIPTION_ID,
         resource_group=RESOURCE_GROUP,
         log_analytics_workspace=LOGANALYTICS_WORKSPACE,
         feature_flag=APPCONFIG_FEATURE_FLAG,
+        label=APPCONFIG_LABEL,
         category_order=METRIC_CATEGORY_ORDER,
         lookback_days=LOOKBACK_DAYS,
     )
 
     # if analysis not found, exit gracefully (may be expected)
     if results is None:
-        title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG}"
+        title = f"Analysis unavailable: {APPCONFIG_FEATURE_FLAG} with label '{APPCONFIG_LABEL}'"
         msg = (
-            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}'."
+            f"Can't find analysis results for feature flag '{APPCONFIG_FEATURE_FLAG}' and label '{APPCONFIG_LABEL}'."
             " Is the first analysis still pending?"
         )
 
