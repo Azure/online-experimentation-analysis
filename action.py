@@ -73,7 +73,7 @@ def main(
     )
 
     result = latest_analysis(
-        DefaultAzureCredential(),
+        DefaultAzureCredential(), # CodeQL [SM05139] GitHub actions will run in a clean environment each time, no one can inject malicious credentials.
         workspace=workspace,
         feature_flag=feature_flag,
         label=label,
