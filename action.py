@@ -73,6 +73,8 @@ def main(
     )
 
     result = latest_analysis(
+        # pylint: disable-next=line-too-long
+        # CodeQL [SM05139] It is used in a secure environment where the credential chain is explicitly controlled.
         DefaultAzureCredential(),
         workspace=workspace,
         feature_flag=feature_flag,
