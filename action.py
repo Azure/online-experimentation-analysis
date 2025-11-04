@@ -73,7 +73,9 @@ def main(
     )
 
     result = latest_analysis(
-        DefaultAzureCredential(), # CodeQL [SM05139] GitHub Actions will run in a clean environment each time, no one can inject malicious credentials.
+        # pylint: disable-next=line-too-long
+        # CodeQL [SM05139] It is used in a secure environment where the credential chain is explicitly controlled.
+        DefaultAzureCredential(),
         workspace=workspace,
         feature_flag=feature_flag,
         label=label,
